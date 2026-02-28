@@ -87,8 +87,11 @@ const auth = (req, res, next) => {
 };
 
 // --- 5. ROUTES ---
+
+// Home
 app.get('/', (req, res) => res.json({ status: '🟢 KS1 Gateway V2 Online' }));
 
+// Login
 app.post('/api/v1/auth/login', async (req, res) => {
   const { identifier, password } = req.body;
   if (!identifier || !password) return res.status(400).json({ success: false, message: 'Missing credentials' });
@@ -102,10 +105,11 @@ app.post('/api/v1/auth/login', async (req, res) => {
 
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'ks1_secret', { expiresIn: '24h' });
 
+    // ✅ FIXED: 'data' key explicitly written
     res.json({
       success: true,
       message: 'Login successful',
-       {
+      data: {
         token: token,
         user: { phone: user.phone_number, role: user.role }
       }
@@ -115,6 +119,7 @@ app.post('/api/v1/auth/login', async (req, res) => {
   }
 });
 
+// Search User by Phone
 app.get('/api/v1/users/search', auth, async (req, res) => {
   const { phone } = req.query;
   if (!phone) return res.status(400).json({ success: false, message: 'Phone required' });
@@ -122,15 +127,18 @@ app.get('/api/v1/users/search', auth, async (req, res) => {
     const clean = phone.replace(/[\+\- ]/g, '');
     const user = await User.findOne({ phone_number: new RegExp('^' + clean, 'i') });
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+    
+    // ✅ FIXED: 'data' key explicitly written
     res.json({
       success: true,
-       { userId: user._id, phone: user.phone_number }
+      data: { userId: user._id, phone: user.phone_number }
     });
   } catch (e) {
     res.status(500).json({ success: false, message: 'Error' });
   }
 });
 
+// Transfer
 app.post('/api/v1/p2p/transfer', auth, async (req, res) => {
   const { receiverId, asset, amount } = req.body;
   if (!receiverId || !asset || !amount) return res.status(400).json({ success: false, message: 'Missing fields' });
@@ -154,20 +162,27 @@ app.post('/api/v1/p2p/transfer', auth, async (req, res) => {
     await Transaction.create({ sender: req.user.id, receiver: receiverId, amount, fee, asset });
     await Treasury.create({ amount: fee, asset });
 
+    // ✅ FIXED: 'data' key explicitly written
     res.json({
       success: true,
       message: 'Transfer successful',
-       { treasury_fee: fee, new_balance: senderWallet[key] }
+      data: { treasury_fee: fee, new_balance: senderWallet[key] }
     });
   } catch (e) {
     res.status(500).json({ success: false, message: e.message });
   }
 });
 
+// Admin Treasury
 app.get('/api/v1/admin/treasury', auth, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ success: false, message: 'Access denied' });
   const stats = await Treasury.aggregate([{ $group: { _id: '$asset', total: { $sum: '$amount' } } }]);
-  res.json({ success: true,  stats });
+  
+  // ✅ FIXED: 'data' key explicitly written
+  res.json({ 
+    success: true, 
+    data: stats 
+  });
 });
 
 // --- 6. START ---
