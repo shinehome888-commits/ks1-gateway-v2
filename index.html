@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KS1 P2P Gateway V2</title>
+    <style>
+        body { background: #0a192f; color: #e6f1ff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .box { background: #112240; padding: 2rem; border-radius: 10px; border: 1px solid #ffd700; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); }
+        h1 { color: #ffd700; margin-top: 0; }
+        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 5px; border: 1px solid #ffd700; background: #0a192f; color: white; box-sizing: border-box; }
+        button { background: #ffd700; color: #000; font-weight: bold; cursor: pointer; border: none; }
+        button:hover { background: #ffea00; }
+        button.secondary { background: transparent; border: 1px solid #64ffda; color: #64ffda; }
+        .hidden { display: none; }
+        .msg { margin-top: 10px; font-size: 0.9rem; min-height: 20px; }
+        .success { color: #64ffda; }
+        .error { color: #ff6b6b; }
+        .brand { font-size: 0.8rem; color: #64ffda; margin-bottom: 20px; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>KS1 P2P Gateway</h1>
+        <div class="brand">Non-custodial • Africa-first • Nonprofit-powered</div>
+        
+        <!-- LOGIN VIEW -->
+        <div id="login-view">
+            <input type="text" id="phone" placeholder="Phone (e.g. 233555123456)" value="233555123456">
+            <input type="password" id="pass" placeholder="Password" value="demo123">
+            <button onclick="login()">LOGIN</button>
+            <div id="login-msg" class="msg"></div>
+        </div>
+
+        <!-- DASHBOARD VIEW -->
+        <div id="dash-view" class="hidden">
+            <h2 id="welcome-msg">Welcome</h2>
+            <div style="text-align:left; background:#0a192f; padding:15px; border-radius:5px; margin-bottom:15px; border-left: 4px solid #ffd700;">
+                <div>💰 USDC: <span id="bal-usdc" style="color:#ffd700">0</span></div>
+                <div>💎 ETH: <span id="bal-eth" style="color:#ffd700">0</span></div>
+            </div>
+            
+            <label style="display:block; text-align:left; font-size:0.8rem; color:#aaa;">Send via WhatsApp Number</label>
+            <input type="text" id="recv-phone" placeholder="Receiver Phone (e.g. 233555987654)">
+            <button onclick="findUser()" style="background:#64ffda; color:#000;">FIND USER</button>
+            <div id="find-msg" class="msg"></div>
+            <input type="hidden" id="recv-id">
+
+            <input type="number" id="amt" placeholder="Amount">
+            <select id="asset"><option value="usdc">USDC</option><option value="eth">ETH</option></select>
+            <button onclick="send()">SEND FUNDS (1% Fee)</button>
+            <div id="send-msg" class="msg"></div>
+            
+            <button onclick="logout()" class="secondary" style="margin-top:20px;">LOGOUT</button>
+        </div>
+    </div>
+
+    <script>
+        // ✅ UPDATED TO YOUR NEW LIVE BACKEND URL
+        const API = "https://ks1-backend-v3.onrender.com";
+        let token = localStorage.getItem('k_token');
+        let role = localStorage.getItem('k_role');
+
+        if(token) showDash();
+
+        async function login() {
+            const p = document.getElementById('phone').value.trim();
+            const pw = document.getElementById('pass').value;
+            const msg = document.getElementById('login-msg');
+            msg.textContent = "Connecting...";
+            msg.className = "msg";
+
+            try {
+                const r = await fetch(`${API}/api/v1/auth/login`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ identifier: p, password: pw })
+                });
+                const d = await r.json();
+                
+                if(d.success) {
+                    token = d.data.token;
+                    role = d.data.user.role;
+                    localStorage.setItem('k_token', token);
+                    localStorage.setItem('k_role', role);
+                    msg.textContent = "Success! Redirecting...";
+                    msg.className = "msg success";
+                    setTimeout(showDash, 1000);
+                } else {
+                    msg.textContent = "Error: " + d.message;
+                    msg.className = "msg error";
+                }
+            } catch(e) {
+                msg.textContent = "Network Error";
+                msg.className = "msg error";
+            }
+        }
+
+        function showDash() {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('dash-view').classList.remove('hidden');
+            document.getElementById('welcome-msg').textContent = role === 'admin' ? '👑 Admin Panel' : '👤 User Dashboard';
+            if(role === 'user') {
+                document.getElementById('bal-usdc').textContent = "1000.00";
+                document.getElementById('bal-eth').textContent = "5.00";
+            } else {
+                document.getElementById('bal-usdc').textContent = "0.00";
+                document.getElementById('bal-eth').textContent = "0.00";
+                loadTreasury();
+            }
+        }
+
+        async function findUser() {
+            const p = document.getElementById('recv-phone').value;
+            const msg = document.getElementById('find-msg');
+            if(!p) return;
+            msg.textContent = "Searching...";
+            try {
+                const r = await fetch(`${API}/api/v1/users/search?phone=${encodeURIComponent(p)}`, {
+                    headers: {'Authorization': `Bearer ${token}`}
+                });
+                const d = await r.json();
+                if(d.success) {
+                    document.getElementById('recv-id').value = d.data.userId;
+                    msg.textContent = "✅ Found: " + d.data.phone;
+                    msg.className = "msg success";
+                } else {
+                    msg.textContent = "❌ " + d.message;
+                    msg.className = "msg error";
+                }
+            } catch(e) { msg.textContent = "Network Error"; msg.className = "msg error"; }
+        }
+
+        async function send() {
+            const id = document.getElementById('recv-id').value;
+            const amt = parseFloat(document.getElementById('amt').value);
+            const asset = document.getElementById('asset').value;
+            const msg = document.getElementById('send-msg');
+            
+            if(!id || !amt) { msg.textContent = "Please find user and enter amount"; msg.className = "msg error"; return; }
+
+            msg.textContent = "Processing...";
+            try {
+                const r = await fetch(`${API}/api/v1/p2p/transfer`, {
+                    method: 'POST',
+                    headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`},
+                    body: JSON.stringify({ receiverId: id, asset, amount: amt })
+                });
+                const d = await r.json();
+                if(d.success) {
+                    msg.innerHTML = "✅ Sent!<br>Fee: " + d.data.treasury_fee + " " + asset.toUpperCase();
+                    msg.className = "msg success";
+                    document.getElementById('amt').value = '';
+                } else {
+                    msg.textContent = "Failed: " + d.message;
+                    msg.className = "msg error";
+                }
+            } catch(e) { msg.textContent = "Network Error"; msg.className = "msg error"; }
+        }
+
+        async function loadTreasury() {
+            try {
+                const r = await fetch(`${API}/api/v1/admin/treasury`, { headers: {'Authorization': `Bearer ${token}`} });
+                const d = await r.json();
+                if(d.success) {
+                    let info = d.data.map(i => `${i._id}: ${i.total}`).join(', ') || "Empty";
+                    alert("Treasury Stats:\n" + info);
+                }
+            } catch(e) {}
+        }
+
+        function logout() {
+            localStorage.clear();
+            location.reload();
+        }
+    </script>
+</body>
+</html>
