@@ -6,24 +6,42 @@
     <title>KS1 P2P Gateway | Secure Transfer</title>
     <style>
         :root {
+            /* Light Theme (Default) */
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --text-sub: #555555;
+            --glow-color: rgba(10, 25, 47, 0.6);
+            --border-color: rgba(255, 215, 0, 0.3);
+            --input-bg: #fafafa;
+            --input-border: #ddd;
+            
+            /* Brand Colors */
             --deep-blue: #0a192f;
             --royal-blue: #003366;
-            --white: #ffffff;
-            --off-white: #f4f7f6;
             --gold: #ffd700;
             --gold-dark: #b8860b;
-            --text-dark: #1a1a1a;
-            --text-grey: #555555;
-            --success: #008000; /* Darker green for white bg */
-            --whatsapp: #25D366;
-            --error: #d32f2f; /* Darker red for white bg */
+            --gold-shadow: #8b6508;
+            
             --shadow-soft: 0 10px 30px rgba(10, 25, 47, 0.15);
-            --shadow-gold: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Dark Theme Variables */
+        body.dark-mode {
+            --bg-color: #050f1e;
+            --card-bg: #112240;
+            --text-main: #e6f1ff;
+            --text-sub: #8892b0;
+            --glow-color: rgba(255, 215, 0, 0.15);
+            --border-color: rgba(255, 215, 0, 0.5);
+            --input-bg: #0a192f;
+            --input-border: #ffd700;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         body { 
-            background: var(--off-white); 
-            color: var(--text-dark); 
+            background: var(--bg-color); 
+            color: var(--text-main); 
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             display: flex; 
             justify-content: center; 
@@ -32,20 +50,22 @@
             margin: 0; 
             overflow-x: hidden;
             position: relative;
+            transition: background 0.4s ease;
         }
 
-        /* --- ROTATING DEEP BLUE GLOW BACKGROUND --- */
+        /* --- ROTATING GLOW BACKGROUND --- */
         .glow-bg {
             position: fixed;
             top: 50%;
             left: 50%;
             width: 150vw;
             height: 150vw;
-            background: radial-gradient(circle, rgba(10, 25, 47, 0.8) 0%, rgba(0, 51, 102, 0.4) 40%, transparent 70%);
+            background: radial-gradient(circle, var(--glow-color) 0%, transparent 60%);
             transform: translate(-50%, -50%);
             z-index: -1;
-            animation: rotateGlow 10s linear infinite;
-            opacity: 0.6;
+            animation: rotateGlow 12s linear infinite;
+            opacity: 0.8;
+            transition: background 0.4s ease;
         }
 
         @keyframes rotateGlow {
@@ -55,17 +75,18 @@
         }
 
         .box { 
-            background: var(--white); 
+            background: var(--card-bg); 
             padding: 3rem 2.5rem; 
             border-radius: 20px; 
-            border: 1px solid rgba(255, 215, 0, 0.3); 
+            border: 1px solid var(--border-color); 
             width: 90%; 
-            max-width: 450px; 
+            max-width: 480px; 
             text-align: center; 
-            box-shadow: var(--shadow-soft), 0 0 40px rgba(10, 25, 47, 0.2); 
+            box-shadow: var(--shadow-soft); 
             position: relative; 
             overflow: hidden; 
             backdrop-filter: blur(10px);
+            transition: background 0.4s ease, border-color 0.4s ease;
         }
 
         /* --- 3D TEXT EFFECTS --- */
@@ -81,7 +102,9 @@
                 2px 2px 0px rgba(255, 215, 0, 0.3),
                 3px 3px 5px rgba(0, 0, 0, 0.2);
             margin-bottom: 10px;
+            transition: color 0.4s ease;
         }
+        body.dark-mode h1 { color: var(--gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
 
         .brand { 
             font-size: 0.75rem; 
@@ -94,16 +117,18 @@
             border-bottom: 2px solid var(--gold);
             display: inline-block;
             padding-bottom: 5px;
+            transition: color 0.4s ease;
         }
+        body.dark-mode .brand { color: var(--gold); }
         
-        input, select, button { 
+        input, select { 
             width: 100%; 
             padding: 14px; 
             margin: 10px 0; 
             border-radius: 8px; 
-            border: 1px solid #ddd; 
-            background: #fafafa; 
-            color: var(--text-dark); 
+            border: 1px solid var(--input-border); 
+            background: var(--input-bg); 
+            color: var(--text-main); 
             box-sizing: border-box; 
             font-size: 1rem; 
             outline: none; 
@@ -112,14 +137,14 @@
         }
 
         input:focus, select:focus { 
-            border-color: var(--deep-blue); 
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(10, 25, 47, 0.1);
+            border-color: var(--gold); 
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
             transform: translateY(-2px);
         }
         
-        /* --- 3D GOLD BUTTONS --- */
+        /* --- UNIVERSAL GOLD 3D BUTTONS --- */
         button { 
+            width: 100%;
             background: linear-gradient(to bottom, var(--gold), var(--gold-dark)); 
             color: #000; 
             font-weight: 800; 
@@ -127,55 +152,90 @@
             border: none; 
             text-transform: uppercase; 
             letter-spacing: 0.8px; 
+            border-radius: 8px;
+            padding: 14px;
+            margin: 10px 0;
+            font-size: 1rem;
             box-shadow: 
-                0 4px 0 #8b6508, 
+                0 4px 0 var(--gold-shadow), 
                 0 5px 10px rgba(0,0,0,0.2);
             transition: all 0.1s;
             position: relative;
             top: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
         }
 
         button:hover { 
             filter: brightness(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 var(--gold-shadow), 0 8px 15px rgba(0,0,0,0.2);
         }
 
         button:active { 
             top: 4px;
-            box-shadow: 
-                0 0 0 #8b6508, 
-                inset 0 2px 5px rgba(0,0,0,0.2);
-        }
-        
-        button.secondary { 
-            background: transparent; 
-            border: 2px solid var(--deep-blue); 
-            color: var(--deep-blue); 
-            text-transform: none; 
-            font-weight: 700;
-            box-shadow: none;
-            top: 0;
-        }
-        button.secondary:hover { 
-            background: rgba(10, 25, 47, 0.05); 
-            top: 0;
-            box-shadow: none;
-        }
-        button.secondary:active {
-            top: 2px;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 0 0 var(--gold-shadow), inset 0 2px 5px rgba(0,0,0,0.2);
+            transform: translateY(0);
         }
 
+        /* Specific overrides for layout */
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-group button { margin: 0; flex: 1; }
+        
         .hidden { display: none; }
         
-        .msg { margin-top: 15px; font-size: 0.95rem; min-height: 24px; line-height: 1.5; font-weight: 600; }
-        .success { color: var(--success); }
-        .error { color: var(--error); }
+        .msg { margin-top: 15px; font-size: 0.95rem; min-height: 24px; line-height: 1.5; font-weight: 600; color: var(--deep-blue); }
+        body.dark-mode .msg { color: var(--gold); }
+        .success { color: var(--deep-blue); } 
+        body.dark-mode .success { color: var(--gold); }
+        .error { color: #d32f2f; } 
 
-        /* --- PROFESSIONAL PREVIEW CARD (White Theme) --- */
+        /* --- REALISTIC BALANCE CARD --- */
+        .balance-card {
+            text-align: left; 
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin-bottom: 25px; 
+            border-left: 6px solid var(--gold); 
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        body.dark-mode .balance-card {
+            background: linear-gradient(135deg, rgba(10, 25, 47, 0.8), rgba(17, 34, 64, 0.8));
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3), 0 4px 10px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        .balance-label {
+            font-size: 0.85rem; 
+            color: var(--text-sub); 
+            text-transform: uppercase; 
+            letter-spacing: 1.2px; 
+            font-weight: 700;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .balance-amount {
+            font-size: 1.6rem; 
+            color: var(--deep-blue); 
+            font-weight: 900; 
+            line-height: 1.4;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        body.dark-mode .balance-amount { color: var(--gold); text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+        .balance-sub { font-size: 1.3rem; color: var(--text-sub); font-weight: 600; margin-top: 5px; display: block;}
+        body.dark-mode .balance-sub { color: #8892b0; }
+
+        /* --- PROFESSIONAL PREVIEW CARD (Branded) --- */
         .preview-card {
             margin-top: 20px;
-            background: #f8f9fa;
-            border: 1px solid var(--success);
+            background: var(--input-bg);
+            border: 2px solid var(--deep-blue);
             border-radius: 12px;
             padding: 20px;
             text-align: left;
@@ -183,73 +243,47 @@
             position: relative;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
+        body.dark-mode .preview-card {
+            border-color: var(--gold);
+            background: rgba(10, 25, 47, 0.5);
+        }
         .preview-header {
-            color: var(--success);
+            color: var(--deep-blue);
             font-size: 0.9rem;
             font-weight: 800;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 2px solid #e0e0e0;
+            border-bottom: 2px solid var(--input-border);
             padding-bottom: 10px;
             text-transform: uppercase;
         }
+        body.dark-mode .preview-header { color: var(--gold); border-bottom-color: rgba(255,215,0,0.3); }
+        
         .preview-body {
-            background: #fff;
+            background: var(--card-bg);
             padding: 15px;
             border-radius: 8px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.85rem;
-            color: #333;
+            color: var(--text-main);
             white-space: pre-wrap; 
-            border-left: 4px solid var(--whatsapp);
+            border-left: 4px solid var(--deep-blue);
             margin-bottom: 20px;
             line-height: 1.6;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid #eee;
+            border: 1px solid var(--input-border);
         }
-        .preview-actions {
-            display: flex;
-            gap: 12px;
+        body.dark-mode .preview-body {
+            background: rgba(0,0,0,0.2);
+            border-left-color: var(--gold);
         }
-        .btn-wa {
-            background: var(--whatsapp);
-            color: white;
-            flex: 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 0.95rem;
-            border: none;
-            box-shadow: 0 4px 0 #1ebc57, 0 5px 10px rgba(37, 211, 102, 0.3);
-            top: 0;
-        }
-        .btn-wa:active { top: 4px; box-shadow: 0 0 0 #1ebc57; }
-        
-        .btn-copy {
-            background: #fff;
-            border: 2px solid var(--text-grey);
-            color: var(--text-grey);
-            flex: 1;
-            font-size: 0.85rem;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-weight: 700;
-            box-shadow: 0 4px 0 #ddd, 0 5px 5px rgba(0,0,0,0.1);
-            top: 0;
-        }
-        .btn-copy:active { top: 4px; box-shadow: 0 0 0 #ddd; }
-        .btn-copy:hover { border-color: var(--text-dark); color: var(--text-dark); }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
         @media (max-width: 400px) {
-            .preview-actions { flex-direction: column; }
-            .btn-wa, .btn-copy { width: 100%; }
+            .btn-group { flex-direction: column; }
         }
     </style>
 </head>
@@ -268,24 +302,34 @@
             <input type="password" id="pass" placeholder="Password" value="demo123">
             <button onclick="login()">🔐 Secure Login</button>
             <div id="login-msg" class="msg"></div>
-            <p style="font-size:0.75rem; color:#888; margin-top:20px; line-height: 1.4;">Demo Credentials:<br><strong>User:</strong> 233555123456 / demo123<br><strong>Admin:</strong> 233555987654 / admin123</p>
+            <p style="font-size:0.75rem; color:var(--text-sub); margin-top:20px; line-height: 1.4;">Demo Credentials:<br><strong>User:</strong> 233555123456 / demo123<br><strong>Admin:</strong> 233555987654 / admin123</p>
         </div>
 
         <!-- DASHBOARD VIEW -->
         <div id="dash-view" class="hidden">
-            <h2 id="welcome-msg" style="color:var(--deep-blue); margin-bottom:5px; font-size: 1.5rem; text-shadow: 1px 1px 0 rgba(255,215,0,0.4);">Welcome</h2>
-            
-            <div style="text-align:left; background:#f8f9fa; padding:20px; border-radius:12px; margin-bottom:25px; border-left: 5px solid var(--gold); box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                <div style="font-size:0.85rem; color:#666; text-transform:uppercase; letter-spacing:1px; font-weight:700;">Available Balance</div>
-                <div style="font-size:1.4rem; color:var(--deep-blue); font-weight:800; margin-top:5px;">
-                    💰 <span id="bal-usdc" style="color:var(--gold-dark);">0.00</span> USDC <br>
-                    <span style="font-size:1.2rem; color:#555;">💎 <span id="bal-eth">0.00</span> ETH</span>
-                </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h2 id="welcome-msg" style="color:var(--deep-blue); margin:0; font-size: 1.5rem; text-shadow: 1px 1px 0 rgba(255,215,0,0.4);">Welcome</h2>
+                <!-- THEME TOGGLE (User Only) -->
+                <button id="theme-toggle" onclick="toggleTheme()" style="width:auto; padding:8px 12px; margin:0; font-size:0.8rem;">🌓 Theme</button>
             </div>
             
-            <label style="display:block; text-align:left; font-size:0.85rem; color:#666; margin-bottom:8px; font-weight:700;">Receiver's WhatsApp Number</label>
+            <!-- Realistic Balance Card -->
+            <div class="balance-card">
+                <span class="balance-label">Available Balance</span>
+                <div class="balance-amount">
+                    💰 <span id="bal-usdc" style="color:var(--gold-dark);">1,000.00</span> USDC
+                </div>
+                <span class="balance-sub">
+                    💎 <span id="bal-eth">5.00</span> ETH
+                </span>
+            </div>
+            
+            <label style="display:block; text-align:left; font-size:0.85rem; color:var(--text-sub); margin-bottom:8px; font-weight:700;">Receiver's WhatsApp Number</label>
             <input type="text" id="recv-phone" placeholder="+233..." value="">
-            <button onclick="findUser()" style="background: linear-gradient(to bottom, #4facfe, #00f2fe); color: #003366; font-weight:800; box-shadow: 0 4px 0 #008080, 0 5px 10px rgba(0,0,0,0.2);">🔍 Find User</button>
+            
+            <div class="btn-group">
+                <button onclick="findUser()">🔍 Find User</button>
+            </div>
             <div id="find-msg" class="msg"></div>
             <input type="hidden" id="recv-id">
 
@@ -299,7 +343,7 @@
             <!-- Dynamic Message Area -->
             <div id="send-msg" class="msg"></div>
             
-            <button onclick="logout()" class="secondary" style="margin-top:30px; width:auto; padding:12px 25px; border-radius:50px;">Logout</button>
+            <button onclick="logout()" style="margin-top:30px; background: transparent; color: var(--text-sub); border: 2px solid var(--text-sub); box-shadow: none; font-size: 0.9rem;">Logout</button>
         </div>
     </div>
 
@@ -308,14 +352,24 @@
         let token = localStorage.getItem('k_token');
         let role = localStorage.getItem('k_role');
 
+        // Load Theme Preference
+        if(localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
         if(token) showDash();
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
 
         async function login() {
             const p = document.getElementById('phone').value.trim();
             const pw = document.getElementById('pass').value;
             const msg = document.getElementById('login-msg');
             msg.textContent = "Authenticating securely...";
-            msg.className = "msg";
             try {
                 const r = await fetch(`${API}/api/v1/auth/login`, {
                     method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -335,6 +389,10 @@
             document.getElementById('login-view').classList.add('hidden');
             document.getElementById('dash-view').classList.remove('hidden');
             document.getElementById('welcome-msg').textContent = role === 'admin' ? '👑 Admin Dashboard' : '👤 User Dashboard';
+            
+            // Hide theme toggle for Admin
+            document.getElementById('theme-toggle').style.display = role === 'admin' ? 'none' : 'block';
+
             if(role === 'user') {
                 document.getElementById('bal-usdc').textContent = "1,000.00";
                 document.getElementById('bal-eth').textContent = "5.00";
@@ -350,7 +408,6 @@
             const msg = document.getElementById('find-msg');
             if(!p) return;
             msg.textContent = "🔍 Searching network...";
-            msg.className = "msg";
             try {
                 const r = await fetch(`${API}/api/v1/users/search?phone=${encodeURIComponent(p)}`, { headers: {'Authorization': `Bearer ${token}`} });
                 const d = await r.json();
@@ -402,19 +459,18 @@
                     const waLink = `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
 
                     msgDiv.className = "msg success";
+                    // Updated Buttons to be Gold and Flexible
                     msgDiv.innerHTML = `
-                        <div style="margin-bottom:15px; font-weight:700; color:var(--success);">✅ <strong>Transaction Successful!</strong><br>Funds sent. Fee: ${fee} ${asset.toUpperCase()}</div>
+                        <div style="margin-bottom:15px; font-weight:700;">✅ <strong>Transaction Successful!</strong><br>Funds sent. Fee: ${fee} ${asset.toUpperCase()}</div>
                         
                         <div class="preview-card">
                             <div class="preview-header">
                                 <span>📱</span> Ready to Send Receipt
                             </div>
                             <div class="preview-body">${messageText.replace(/\n/g, '<br>')}</div>
-                            <div class="preview-actions">
-                                <button class="btn-copy" onclick="copyToClipboard(\`${messageText.replace(/`/g, '\\`')}\`)">📋 Copy Text</button>
-                                <a href="${waLink}" target="_blank" class="btn-wa" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
-                                    <span>💬</span> Send via WhatsApp
-                                </a>
+                            <div class="btn-group">
+                                <button onclick="copyToClipboard(\`${messageText.replace(/`/g, '\\`')}\`)" style="margin:0;">📋 Copy Text</button>
+                                <a href="${waLink}" target="_blank" style="margin:0; text-decoration:none;">💬 Send via WhatsApp</a>
                             </div>
                         </div>
                     `;
@@ -435,7 +491,6 @@
             navigator.clipboard.writeText(text).then(() => {
                 alert("✅ Message copied to clipboard!");
             }).catch(err => {
-                console.error('Failed to copy: ', err);
                 alert("Could not copy automatically. Please select text manually.");
             });
         }
