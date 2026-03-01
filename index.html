@@ -9,14 +9,41 @@
         .box { background: #112240; padding: 2rem; border-radius: 10px; border: 1px solid #ffd700; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); }
         h1 { color: #ffd700; margin-top: 0; }
         input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 5px; border: 1px solid #ffd700; background: #0a192f; color: white; box-sizing: border-box; }
-        button { background: #ffd700; color: #000; font-weight: bold; cursor: pointer; border: none; }
+        button { background: #ffd700; color: #000; font-weight: bold; cursor: pointer; border: none; transition: background 0.2s; }
         button:hover { background: #ffea00; }
         button.secondary { background: transparent; border: 1px solid #64ffda; color: #64ffda; }
+        button.secondary:hover { background: rgba(100, 255, 218, 0.1); }
         .hidden { display: none; }
-        .msg { margin-top: 10px; font-size: 0.9rem; min-height: 20px; }
+        .msg { margin-top: 10px; font-size: 0.9rem; min-height: 20px; line-height: 1.4; }
         .success { color: #64ffda; }
         .error { color: #ff6b6b; }
         .brand { font-size: 0.8rem; color: #64ffda; margin-bottom: 20px; letter-spacing: 1px; }
+        
+        /* WhatsApp Button Style */
+        .wa-container {
+            margin-top: 15px;
+            padding: 10px;
+            background: #0a192f;
+            border: 1px solid #25D366;
+            border-radius: 5px;
+            animation: fadeIn 0.5s ease-in;
+        }
+        .wa-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+        .wa-btn:hover { background: #1ebc57; }
+        .wa-label { color: #25D366; font-size: 0.8rem; margin-bottom: 5px; display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -49,6 +76,8 @@
             <input type="number" id="amt" placeholder="Amount">
             <select id="asset"><option value="usdc">USDC</option><option value="eth">ETH</option></select>
             <button onclick="send()">SEND FUNDS (1% Fee)</button>
+            
+            <!-- Message Area (Success/Error + WhatsApp Button) -->
             <div id="send-msg" class="msg"></div>
             
             <button onclick="logout()" class="secondary" style="margin-top:20px;">LOGOUT</button>
@@ -56,7 +85,7 @@
     </div>
 
     <script>
-        // ✅ UPDATED TO YOUR NEW LIVE BACKEND URL
+        // ✅ YOUR LIVE BACKEND URL
         const API = "https://ks1-backend-v3.onrender.com";
         let token = localStorage.getItem('k_token');
         let role = localStorage.getItem('k_role');
@@ -131,15 +160,22 @@
             } catch(e) { msg.textContent = "Network Error"; msg.className = "msg error"; }
         }
 
+        // ✅ UPDATED SEND FUNCTION WITH WHATSAPP BUTTON
         async function send() {
             const id = document.getElementById('recv-id').value;
             const amt = parseFloat(document.getElementById('amt').value);
             const asset = document.getElementById('asset').value;
-            const msg = document.getElementById('send-msg');
+            const msgDiv = document.getElementById('send-msg');
             
-            if(!id || !amt) { msg.textContent = "Please find user and enter amount"; msg.className = "msg error"; return; }
+            if(!id || !amt) { 
+                msgDiv.textContent = "Please find user and enter amount"; 
+                msgDiv.className = "msg error"; 
+                return; 
+            }
 
-            msg.textContent = "Processing...";
+            msgDiv.innerHTML = "Processing...";
+            msgDiv.className = "msg";
+
             try {
                 const r = await fetch(`${API}/api/v1/p2p/transfer`, {
                     method: 'POST',
@@ -147,15 +183,40 @@
                     body: JSON.stringify({ receiverId: id, asset, amount: amt })
                 });
                 const d = await r.json();
+
                 if(d.success) {
-                    msg.innerHTML = "✅ Sent!<br>Fee: " + d.data.treasury_fee + " " + asset.toUpperCase();
-                    msg.className = "msg success";
+                    const fee = d.data.treasury_fee;
+                    const receiverPhone = d.data.receiver_phone; 
+                    
+                    // 1. Show Success Message
+                    msgDiv.innerHTML = `✅ Sent!<br>Fee: ${fee} ${asset.toUpperCase()}`;
+                    msgDiv.className = "msg success";
+                    
+                    // 2. Clear Input
                     document.getElementById('amt').value = '';
+
+                    // 3. CREATE WHATSAPP BUTTON
+                    const waText = `Hi! ✅ Payment Successful on KS1 P2P Gateway.%0A%0AI just sent you *${amt} ${asset.toUpperCase()}*.%0ARef: KS1-DEMO-${Math.floor(Math.random()*10000)}%0A%0APlease check your wallet balance.`;
+                    
+                    const waHTML = `
+                        <div class="wa-container">
+                            <span class="wa-label">📱 Notify Receiver</span>
+                            <a href="https://wa.me/${receiverPhone}?text=${waText}" target="_blank" class="wa-btn">
+                                Open WhatsApp & Send Receipt
+                            </a>
+                        </div>
+                    `;
+                    
+                    msgDiv.innerHTML += waHTML;
+
                 } else {
-                    msg.textContent = "Failed: " + d.message;
-                    msg.className = "msg error";
+                    msgDiv.textContent = "Failed: " + d.message;
+                    msgDiv.className = "msg error";
                 }
-            } catch(e) { msg.textContent = "Network Error"; msg.className = "msg error"; }
+            } catch(e) { 
+                msgDiv.textContent = "Network Error"; 
+                msgDiv.className = "msg error"; 
+            }
         }
 
         async function loadTreasury() {
