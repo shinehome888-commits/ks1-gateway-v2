@@ -8,16 +8,13 @@ const bcrypt = require('bcrypt');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// --- 1. DATABASE CONNECTION ---
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB Connected'))
   .catch(err => console.error('❌ DB Error:', err));
 
-// --- 2. MODELS ---
 const UserSchema = new mongoose.Schema({
   phone_number: { type: String, unique: true, required: true },
   email: { type: String, sparse: true },
@@ -52,7 +49,6 @@ const TreasurySchema = new mongoose.Schema({
 });
 const Treasury = mongoose.model('Treasury', TreasurySchema);
 
-// --- 3. SETUP DEMO USERS ---
 async function setupUsers() {
   try {
     const count = await User.countDocuments();
@@ -76,7 +72,6 @@ async function setupUsers() {
   }
 }
 
-// --- 4. MIDDLEWARE ---
 const auth = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) return res.status(401).json({ success: false, message: 'No token' });
@@ -88,12 +83,9 @@ const auth = (req, res, next) => {
   }
 };
 
-// --- 5. ROUTES ---
-
-// Home
 app.get('/', (req, res) => res.json({ status: '🟢 KS1 Gateway V2 Online' }));
 
-// Login
+// LOGIN - USING 'result' KEY
 app.post('/api/v1/auth/login', async (req, res) => {
   const { identifier, password } = req.body;
   if (!identifier || !password) return res.status(400).json({ success: false, message: 'Missing credentials' });
@@ -107,11 +99,11 @@ app.post('/api/v1/auth/login', async (req, res) => {
 
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'ks1_secret', { expiresIn: '24h' });
 
-    // ✅ FIXED: 'data' key explicitly written
+    // ✅ KEY CHANGED TO 'result' TO AVOID FILTER ISSUES
     res.json({
       success: true,
       message: 'Login successful',
-       {
+      result: {
         token: token,
         user: { phone: user.phone_number, role: user.role }
       }
@@ -121,7 +113,7 @@ app.post('/api/v1/auth/login', async (req, res) => {
   }
 });
 
-// Admin Generate Reset Code
+// ADMIN GENERATE CODE - USING 'result' KEY
 app.post('/api/v1/admin/generate-reset-code', auth, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ success: false, message: 'Access denied' });
   
@@ -139,18 +131,17 @@ app.post('/api/v1/admin/generate-reset-code', auth, async (req, res) => {
     user.reset_expires = new Date(Date.now() + 60 * 60 * 1000); 
     await user.save();
 
-    // ✅ FIXED: 'data' key explicitly written
     res.json({
       success: true,
       message: `Reset code generated for ${user.phone_number}`,
-       { resetCode, phone: user.phone_number }
+      result: { resetCode, phone: user.phone_number }
     });
   } catch (e) {
     res.status(500).json({ success: false, message: e.message });
   }
 });
 
-// User Reset Password
+// RESET PASSWORD
 app.post('/api/v1/auth/reset-password', async (req, res) => {
   const { identifier, code, newPassword } = req.body;
   if (!identifier || !code || !newPassword) return res.status(400).json({ success: false, message: 'Missing fields' });
@@ -179,7 +170,7 @@ app.post('/api/v1/auth/reset-password', async (req, res) => {
   }
 });
 
-// Search User by Phone
+// SEARCH USER - USING 'result' KEY
 app.get('/api/v1/users/search', auth, async (req, res) => {
   const { phone } = req.query;
   if (!phone) return res.status(400).json({ success: false, message: 'Phone required' });
@@ -188,17 +179,16 @@ app.get('/api/v1/users/search', auth, async (req, res) => {
     const user = await User.findOne({ phone_number: new RegExp('^' + clean, 'i') });
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
     
-    // ✅ FIXED: 'data' key explicitly written
     res.json({
       success: true,
-       { userId: user._id, phone: user.phone_number }
+      result: { userId: user._id, phone: user.phone_number }
     });
   } catch (e) {
     res.status(500).json({ success: false, message: 'Error' });
   }
 });
 
-// Transfer
+// TRANSFER - USING 'result' KEY
 app.post('/api/v1/p2p/transfer', auth, async (req, res) => {
   const { receiverId, asset, amount } = req.body;
   if (!receiverId || !asset || !amount) return res.status(400).json({ success: false, message: 'Missing fields' });
@@ -223,45 +213,41 @@ app.post('/api/v1/p2p/transfer', auth, async (req, res) => {
     await Transaction.create({ sender: req.user.id, receiver: receiverId, amount, fee, asset });
     await Treasury.create({ amount: fee, asset });
 
-    // ✅ FIXED: 'data' key explicitly written
     res.json({
       success: true,
       message: 'Transfer successful',
-       { treasury_fee: fee, new_balance: senderWallet[key] }
+      result: { treasury_fee: fee, new_balance: senderWallet[key] }
     });
   } catch (e) {
     res.status(500).json({ success: false, message: e.message });
   }
 });
 
-// Admin Treasury
+// TREASURY - USING 'result' KEY
 app.get('/api/v1/admin/treasury', auth, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ success: false, message: 'Access denied' });
   const stats = await Treasury.aggregate([{ $group: { _id: '$asset', total: { $sum: '$amount' } } }]);
   
-  // ✅ FIXED: 'data' key explicitly written
   res.json({ 
     success: true, 
-     stats 
+    result: stats 
   });
 });
 
-// Admin Get All Users (Fixes the 404 Error)
+// ADMIN USERS - USING 'result' KEY
 app.get('/api/v1/admin/users', auth, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ success: false, message: 'Access denied' });
   try {
     const users = await User.find({}, 'phone_number email role createdAt');
-    // ✅ FIXED: 'data' key explicitly written
     res.json({ 
       success: true, 
-       users 
+      result: users 
     });
   } catch (e) {
     res.status(500).json({ success: false, message: e.message });
   }
 });
 
-// --- 6. START ---
 app.listen(PORT, async () => {
   await setupUsers();
   console.log(`🚀 Server running on port ${PORT}`);
