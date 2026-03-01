@@ -92,12 +92,11 @@
                 <button id="theme-toggle" onclick="toggleTheme()" style="width:auto; padding:8px 12px; margin:0; font-size:0.8rem;">🌓 Theme</button>
             </div>
             
-            <div class="btn-group" id="nav-tabs" style="margin-bottom:20px;">
-                <button onclick="showTab('transfer')" id="tab-transfer">💸 Transfer</button>
-                <button onclick="showTab('users')" id="tab-users" class="hidden">👥 Manage Users</button>
-            </div>
+            <!-- NAV TABS: ONLY SHOW TRANSFER FOR USER -->
+            <div class="btn-group" id="nav-tabs" style="margin-bottom:20px;"></div>
 
-            <div id="tab-transfer-content">
+            <!-- USER DASHBOARD CONTENT -->
+            <div id="user-dashboard-content" class="hidden">
                 <div class="balance-card">
                     <span class="balance-label">Available Balance</span>
                     <div class="balance-amount">💰 <span id="bal-usdc" style="color:var(--gold-dark);">1,000.00</span> USDC</div>
@@ -116,10 +115,14 @@
                 <div id="send-msg" class="msg"></div>
             </div>
 
-            <div id="tab-users-content" class="hidden">
-                <h3 style="color:var(--deep-blue); text-align:left;">Registered Users</h3>
-                <button onclick="loadUsers()" style="font-size:0.9rem;">🔄 Refresh List</button>
-                <div id="user-list-container" class="user-list"><div style="padding:20px;">Loading users...</div></div>
+            <!-- ADMIN DASHBOARD CONTENT -->
+            <div id="admin-dashboard-content" class="hidden">
+                <div style="text-align:left; margin-bottom:20px;">
+                    <h3 style="color:var(--deep-blue); margin:0;">👑 Admin Controls</h3>
+                    <p style="font-size:0.9rem; color:var(--text-sub); margin:5px 0;">Manage users and system security.</p>
+                </div>
+                <button onclick="loadUsers()" style="font-size:0.95rem; margin-bottom:15px;">👥 Manage Users</button>
+                <div id="user-list-container" class="user-list"><div style="padding:20px;">Loading...</div></div>
                 <div id="admin-msg" class="msg"></div>
             </div>
             
@@ -128,7 +131,6 @@
     </div>
 
     <script>
-        // ✅ CORRECT BACKEND URL
         const API = "https://ks1-backend-v3.onrender.com";
         let token = localStorage.getItem('k_token');
         let role = localStorage.getItem('k_role');
@@ -177,7 +179,6 @@
             } catch(e) { 
                 msg.textContent = "❌ Connection Failed"; 
                 msg.className = "msg error"; 
-                console.error("Login error:", e);
             }
         }
 
@@ -210,34 +211,27 @@
             } catch(e) { 
                 msg.textContent = "❌ Network Error"; 
                 msg.className = "msg error"; 
-                console.error("Reset error:", e);
             }
         }
 
         function showDash() {
             document.getElementById('login-view').classList.add('hidden');
             document.getElementById('dash-view').classList.remove('hidden');
-            document.getElementById('welcome-msg').textContent = role === 'admin' ? '👑 Admin Dashboard' : '👤 User Dashboard';
+            
+            // Hide theme toggle for Admin
             document.getElementById('theme-toggle').style.display = role === 'admin' ? 'none' : 'block';
-            if(role === 'admin') { 
-                document.getElementById('tab-users').classList.remove('hidden'); 
-                showTab('users'); 
-            } else { 
-                document.getElementById('tab-users').classList.add('hidden'); 
-                showTab('transfer'); 
-                document.getElementById('bal-usdc').textContent = "1,000.00"; 
-                document.getElementById('bal-eth').textContent = "5.00"; 
-            }
-        }
-
-        function showTab(tabName) {
-            document.getElementById('tab-transfer-content').classList.add('hidden');
-            document.getElementById('tab-users-content').classList.add('hidden');
-            if(tabName === 'transfer') 
-                document.getElementById('tab-transfer-content').classList.remove('hidden');
-            else if (tabName === 'users') { 
-                document.getElementById('tab-users-content').classList.remove('hidden'); 
-                loadUsers(); 
+            
+            if(role === 'admin') {
+                // ADMIN VIEW
+                document.getElementById('welcome-msg').textContent = '👑 Admin Dashboard';
+                document.getElementById('admin-dashboard-content').classList.remove('hidden');
+                loadUsers(); // Auto-load users for admin
+            } else {
+                // USER VIEW
+                document.getElementById('welcome-msg').textContent = '👤 User Dashboard';
+                document.getElementById('user-dashboard-content').classList.remove('hidden');
+                document.getElementById('bal-usdc').textContent = "1,000.00";
+                document.getElementById('bal-eth').textContent = "5.00";
             }
         }
 
@@ -248,19 +242,12 @@
                 const r = await fetch(`${API}/api/v1/admin/users`, { 
                     headers: {'Authorization': `Bearer ${token}`} 
                 });
-                
-                // ✅ CRITICAL: Show exact backend error if request fails
                 if (!r.ok) {
                     let errMsg = `HTTP ${r.status}`;
-                    try {
-                        const errData = await r.json();
-                        errMsg += `: ${errData.message || 'Unknown error'}`;
-                    } catch (e) {}
-                    container.innerHTML = `<div class="debug-error">❌ Backend Error<br>${errMsg}</div><div style="padding:15px; font-size:0.85rem; color:#888;">Check Render logs for 'MongoDB Connected'</div>`;
-                    console.error("Admin users fetch failed:", errMsg);
+                    try { const errData = await r.json(); errMsg += `: ${errData.message || 'Unknown error'}`; } catch (e) {}
+                    container.innerHTML = `<div class="debug-error">❌ Backend Error<br>${errMsg}</div>`;
                     return;
                 }
-                
                 const d = await r.json();
                 if(d.success && d.result.users && d.result.users.length > 0) {
                     let html = d.result.users.map(u => `
@@ -277,8 +264,7 @@
                     container.innerHTML = '<div style="padding:25px; color:var(--text-sub);">📭 No users found</div>'; 
                 }
             } catch(e) { 
-                container.innerHTML = `<div class="debug-error">🌐 Network Error<br>${e.message}</div><div style="padding:15px; font-size:0.85rem; color:#888;">Is backend URL correct?</div>`;
-                console.error("Load users exception:", e);
+                container.innerHTML = `<div class="debug-error">🌐 Network Error<br>${e.message}</div>`;
             }
         }
 
@@ -289,10 +275,7 @@
             try {
                 const r = await fetch(`${API}/api/v1/admin/generate-reset-code`, { 
                     method: 'POST',
-                    headers: {
-                        'Content-Type':'application/json', 
-                        'Authorization': `Bearer ${token}`
-                    },
+                    headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`},
                     body: JSON.stringify({ userId }) 
                 });
                 const d = await r.json();
@@ -306,7 +289,6 @@
             } catch(e) { 
                 msg.textContent = "❌ Failed: " + e.message; 
                 msg.className = "msg error"; 
-                console.error("Generate code error:", e);
             }
         }
 
@@ -331,7 +313,6 @@
             } catch(e) { 
                 msg.textContent = "❌ Network Error"; 
                 msg.className = "msg error"; 
-                console.error("Find user error:", e);
             }
         }
 
@@ -352,10 +333,7 @@
             try {
                 const r = await fetch(`${API}/api/v1/p2p/transfer`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type':'application/json', 
-                        'Authorization': `Bearer ${token}`
-                    },
+                    headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`},
                     body: JSON.stringify({ receiverId: id, asset, amount: amt }) 
                 });
                 const d = await r.json();
@@ -385,12 +363,11 @@
             } catch(e) { 
                 msgDiv.textContent = "❌ Network Error"; 
                 msgDiv.className = "msg error"; 
-                console.error("Transfer error:", e);
             }
         }
 
         function copyToClipboard(text) { 
-            navigator.clipboard.writeText(text).then(() => alert("✅ Copied to clipboard!")).catch(() => alert("Copy failed.")); 
+            navigator.clipboard.writeText(text).then(() => alert("✅ Copied!")).catch(() => alert("Copy failed.")); 
         }
         function logout() { 
             localStorage.clear(); 
