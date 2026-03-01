@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, sparse: true },
   password_hash: { type: String, required: true },
   role: { type: String, default: 'user', enum: ['user', 'admin'] },
-  // New fields for Password Reset
+  // Fields for Password Reset
   reset_code: { type: String, default: null },
   reset_expires: { type: Date, default: null }
 });
@@ -37,8 +37,8 @@ const WalletSchema = new mongoose.Schema({
 const Wallet = mongoose.model('Wallet', WalletSchema);
 
 const TransactionSchema = new mongoose.Schema({
-  sender: mongoose.Schema.Types.ObjectId,
-  receiver: mongoose.Schema.Types.ObjectId,
+  sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  receiver: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   amount: Number,
   fee: Number,
   asset: String,
@@ -229,7 +229,7 @@ app.post('/api/v1/p2p/transfer', auth, async (req, res) => {
     res.json({
       success: true,
       message: 'Transfer successful',
-       { treasury_fee: fee, new_balance: senderWallet[key], receiver_phone: recvWallet.user ? recvWallet.user.phone_number : '' } // Simplified for demo
+       { treasury_fee: fee, new_balance: senderWallet[key] }
     });
   } catch (e) {
     res.status(500).json({ success: false, message: e.message });
@@ -243,11 +243,11 @@ app.get('/api/v1/admin/treasury', auth, async (req, res) => {
   
   res.json({ 
     success: true, 
-    data: stats 
+     stats 
   });
 });
 
-// ✅ NEW: Admin Get All Users (For Management)
+// ✅ NEW: Admin Get All Users (Fixes the 404 Error)
 app.get('/api/v1/admin/users', auth, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ success: false, message: 'Access denied' });
   try {
