@@ -3,47 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KS1 P2P Gateway V2</title>
+    <title>KS1 P2P Gateway | Secure Transfer</title>
     <style>
-        body { background: #0a192f; color: #e6f1ff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .box { background: #112240; padding: 2rem; border-radius: 10px; border: 1px solid #ffd700; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); }
-        h1 { color: #ffd700; margin-top: 0; }
-        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 5px; border: 1px solid #ffd700; background: #0a192f; color: white; box-sizing: border-box; }
-        button { background: #ffd700; color: #000; font-weight: bold; cursor: pointer; border: none; transition: background 0.2s; }
-        button:hover { background: #ffea00; }
-        button.secondary { background: transparent; border: 1px solid #64ffda; color: #64ffda; }
-        button.secondary:hover { background: rgba(100, 255, 218, 0.1); }
-        .hidden { display: none; }
-        .msg { margin-top: 10px; font-size: 0.9rem; min-height: 20px; line-height: 1.4; }
-        .success { color: #64ffda; }
-        .error { color: #ff6b6b; }
-        .brand { font-size: 0.8rem; color: #64ffda; margin-bottom: 20px; letter-spacing: 1px; }
+        :root {
+            --deep-blue: #0a192f;
+            --card-bg: #112240;
+            --gold: #ffd700;
+            --gold-glow: rgba(255, 215, 0, 0.2);
+            --text-light: #e6f1ff;
+            --success: #64ffda;
+            --whatsapp: #25D366;
+            --error: #ff6b6b;
+        }
+        body { 
+            background: var(--deep-blue); 
+            color: var(--text-light); 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+        .box { 
+            background: var(--card-bg); 
+            padding: 2.5rem 2rem; 
+            border-radius: 12px; 
+            border: 1px solid var(--gold); 
+            width: 90%; 
+            max-width: 450px; 
+            text-align: center; 
+            box-shadow: 0 0 25px var(--gold-glow); 
+            position: relative; 
+            overflow: hidden; 
+        }
         
-        /* WhatsApp Button Style */
-        .wa-container {
-            margin-top: 15px;
-            padding: 10px;
-            background: #0a192f;
-            border: 1px solid #25D366;
-            border-radius: 5px;
-            animation: fadeIn 0.5s ease-in;
+        /* Animated Background Glow */
+        .box::before { 
+            content: ''; 
+            position: absolute; 
+            top: -50%; left: -50%; 
+            width: 200%; height: 200%; 
+            background: linear-gradient(45deg, transparent, rgba(255,215,0,0.08), transparent); 
+            animation: rotate 8s linear infinite; 
+            z-index: -1; 
         }
-        .wa-btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background: #25D366;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            box-sizing: border-box;
-            margin-top: 5px;
-        }
-        .wa-btn:hover { background: #1ebc57; }
-        .wa-label { color: #25D366; font-size: 0.8rem; margin-bottom: 5px; display: block; }
+        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        h1 { color: var(--gold); margin-top: 0; text-shadow: 0 0 12px rgba(255,215,0,0.4); font-size: 1.8rem; }
+        .brand { 
+            font-size: 0.75rem; 
+            color: var(--success); 
+            margin-bottom: 25px; 
+            letter-spacing: 1.5px; 
+            text-transform: uppercase; 
+            font-weight: 600;
+            opacity: 0.9;
+        }
+        
+        input, select, button { 
+            width: 100%; 
+            padding: 14px; 
+            margin: 10px 0; 
+            border-radius: 8px; 
+            border: 1px solid var(--gold); 
+            background: var(--deep-blue); 
+            color: white; 
+            box-sizing: border-box; 
+            font-size: 1rem; 
+            outline: none; 
+            transition: all 0.3s ease; 
+        }
+        input:focus, select:focus { 
+            box-shadow: 0 0 12px var(--gold-glow); 
+            border-color: var(--success); 
+            transform: translateY(-2px);
+        }
+        
+        button { 
+            background: linear-gradient(135deg, var(--gold), #b8860b); 
+            color: #000; 
+            font-weight: 700; 
+            cursor: pointer; 
+            border: none; 
+            text-transform: uppercase; 
+            letter-spacing: 0.8px; 
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+        }
+        button:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4); 
+        }
+        button:active { transform: translateY(1px); }
+        
+        button.secondary { 
+            background: transparent; 
+            border: 1px solid var(--success); 
+            color: var(--success); 
+            text-transform: none; 
+            font-weight: 600;
+            box-shadow: none;
+        }
+        button.secondary:hover { 
+            background: rgba(100, 255, 218, 0.1); 
+            transform: none; 
+            box-shadow: 0 0 10px rgba(100, 255, 218, 0.2);
+        }
+
+        .hidden { display: none; }
+        .msg { margin-top: 15px; font-size: 0.95rem; min-height: 24px; line-height: 1.5; }
+        .success { color: var(--success); font-weight: 500; }
+        .error { color: var(--error); font-weight: 500; }
+
+        /* --- PROFESSIONAL PREVIEW CARD STYLES --- */
+        .preview-card {
+            margin-top: 20px;
+            background: rgba(5, 15, 30, 0.9);
+            border: 1px solid var(--success);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: left;
+            animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .preview-header {
+            color: var(--success);
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+            padding-bottom: 10px;
+        }
+        .preview-body {
+            background: #020c1b;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #dcdcdc;
+            white-space: pre-wrap; 
+            border-left: 4px solid var(--whatsapp);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+        .preview-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .btn-wa {
+            background: var(--whatsapp);
+            color: white;
+            flex: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            border: none;
+        }
+        .btn-wa:hover { background: #1ebc57; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
+        
+        .btn-copy {
+            background: transparent;
+            border: 1px solid var(--text-light);
+            color: var(--text-light);
+            flex: 1;
+            font-size: 0.85rem;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-copy:hover { background: rgba(255,255,255,0.1); border-color: white; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Responsive adjustments */
+        @media (max-width: 400px) {
+            .preview-actions { flex-direction: column; }
+            .btn-wa, .btn-copy { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -53,34 +197,41 @@
         
         <!-- LOGIN VIEW -->
         <div id="login-view">
-            <input type="text" id="phone" placeholder="Phone (e.g. 233555123456)" value="233555123456">
+            <input type="text" id="phone" placeholder="Phone Number (e.g. 233...)" value="233555123456">
             <input type="password" id="pass" placeholder="Password" value="demo123">
-            <button onclick="login()">LOGIN</button>
+            <button onclick="login()">🔐 Secure Login</button>
             <div id="login-msg" class="msg"></div>
+            <p style="font-size:0.75rem; color:#666; margin-top:20px;">Demo Credentials:<br>User: 233555123456 / demo123<br>Admin: 233555987654 / admin123</p>
         </div>
 
         <!-- DASHBOARD VIEW -->
         <div id="dash-view" class="hidden">
-            <h2 id="welcome-msg">Welcome</h2>
-            <div style="text-align:left; background:#0a192f; padding:15px; border-radius:5px; margin-bottom:15px; border-left: 4px solid #ffd700;">
-                <div>💰 USDC: <span id="bal-usdc" style="color:#ffd700">0</span></div>
-                <div>💎 ETH: <span id="bal-eth" style="color:#ffd700">0</span></div>
+            <h2 id="welcome-msg" style="color:var(--gold); margin-bottom:5px;">Welcome</h2>
+            <div style="text-align:left; background:rgba(255,255,255,0.03); padding:20px; border-radius:10px; margin-bottom:25px; border-left: 5px solid var(--gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                <div style="font-size:0.85rem; color:#8892b0; text-transform:uppercase; letter-spacing:1px;">Available Balance</div>
+                <div style="font-size:1.4rem; color:var(--gold); font-weight:800; margin-top:5px; text-shadow: 0 0 10px rgba(255,215,0,0.3);">
+                    💰 <span id="bal-usdc">0.00</span> USDC <br>
+                    <span style="font-size:1.2rem; color:#fff;">💎 <span id="bal-eth">0.00</span> ETH</span>
+                </div>
             </div>
             
-            <label style="display:block; text-align:left; font-size:0.8rem; color:#aaa;">Send via WhatsApp Number</label>
-            <input type="text" id="recv-phone" placeholder="Receiver Phone (e.g. 233555987654)">
-            <button onclick="findUser()" style="background:#64ffda; color:#000;">FIND USER</button>
+            <label style="display:block; text-align:left; font-size:0.85rem; color:#8892b0; margin-bottom:8px; font-weight:600;">Receiver's WhatsApp Number</label>
+            <input type="text" id="recv-phone" placeholder="+233..." value="">
+            <button onclick="findUser()" style="background:var(--success); color:#000; font-weight:700;">🔍 Find User</button>
             <div id="find-msg" class="msg"></div>
             <input type="hidden" id="recv-id">
 
-            <input type="number" id="amt" placeholder="Amount">
-            <select id="asset"><option value="usdc">USDC</option><option value="eth">ETH</option></select>
-            <button onclick="send()">SEND FUNDS (1% Fee)</button>
+            <div style="display:flex; gap:12px; margin-top:20px;">
+                <input type="number" id="amt" placeholder="Amount" style="flex:2;" step="0.01">
+                <select id="asset" style="flex:1; font-weight:600;"><option value="usdc">USDC</option><option value="eth">ETH</option></select>
+            </div>
             
-            <!-- Message Area (Success/Error + WhatsApp Button) -->
+            <button onclick="send()" style="margin-top:15px; font-size:1.05rem;">🚀 Send Funds (1% Fee)</button>
+            
+            <!-- Dynamic Message Area -->
             <div id="send-msg" class="msg"></div>
             
-            <button onclick="logout()" class="secondary" style="margin-top:20px;">LOGOUT</button>
+            <button onclick="logout()" class="secondary" style="margin-top:30px; width:auto; padding:12px 25px; border-radius:50px;">Logout</button>
         </div>
     </div>
 
@@ -96,46 +247,34 @@
             const p = document.getElementById('phone').value.trim();
             const pw = document.getElementById('pass').value;
             const msg = document.getElementById('login-msg');
-            msg.textContent = "Connecting...";
+            msg.textContent = "Authenticating securely...";
             msg.className = "msg";
-
             try {
                 const r = await fetch(`${API}/api/v1/auth/login`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ identifier: p, password: pw })
                 });
                 const d = await r.json();
-                
                 if(d.success) {
-                    token = d.data.token;
-                    role = d.data.user.role;
-                    localStorage.setItem('k_token', token);
-                    localStorage.setItem('k_role', role);
-                    msg.textContent = "Success! Redirecting...";
-                    msg.className = "msg success";
+                    token = d.data.token; role = d.data.user.role;
+                    localStorage.setItem('k_token', token); localStorage.setItem('k_role', role);
+                    msg.textContent = "✅ Success! Redirecting..."; msg.className = "msg success";
                     setTimeout(showDash, 1000);
-                } else {
-                    msg.textContent = "Error: " + d.message;
-                    msg.className = "msg error";
-                }
-            } catch(e) {
-                msg.textContent = "Network Error";
-                msg.className = "msg error";
-            }
+                } else { msg.textContent = "❌ " + d.message; msg.className = "msg error"; }
+            } catch(e) { msg.textContent = "❌ Connection Failed"; msg.className = "msg error"; }
         }
 
         function showDash() {
             document.getElementById('login-view').classList.add('hidden');
             document.getElementById('dash-view').classList.remove('hidden');
-            document.getElementById('welcome-msg').textContent = role === 'admin' ? '👑 Admin Panel' : '👤 User Dashboard';
+            document.getElementById('welcome-msg').textContent = role === 'admin' ? '👑 Admin Dashboard' : '👤 User Dashboard';
             if(role === 'user') {
-                document.getElementById('bal-usdc').textContent = "1000.00";
+                document.getElementById('bal-usdc').textContent = "1,000.00";
                 document.getElementById('bal-eth').textContent = "5.00";
-            } else {
+            } else { 
                 document.getElementById('bal-usdc').textContent = "0.00";
                 document.getElementById('bal-eth').textContent = "0.00";
-                loadTreasury();
+                loadTreasury(); 
             }
         }
 
@@ -143,37 +282,30 @@
             const p = document.getElementById('recv-phone').value;
             const msg = document.getElementById('find-msg');
             if(!p) return;
-            msg.textContent = "Searching...";
+            msg.textContent = "🔍 Searching network...";
+            msg.className = "msg";
             try {
-                const r = await fetch(`${API}/api/v1/users/search?phone=${encodeURIComponent(p)}`, {
-                    headers: {'Authorization': `Bearer ${token}`}
-                });
+                const r = await fetch(`${API}/api/v1/users/search?phone=${encodeURIComponent(p)}`, { headers: {'Authorization': `Bearer ${token}`} });
                 const d = await r.json();
                 if(d.success) {
                     document.getElementById('recv-id').value = d.data.userId;
-                    msg.textContent = "✅ Found: " + d.data.phone;
+                    msg.innerHTML = `✅ <strong>Verified:</strong> ${d.data.phone}`;
                     msg.className = "msg success";
-                } else {
-                    msg.textContent = "❌ " + d.message;
-                    msg.className = "msg error";
-                }
-            } catch(e) { msg.textContent = "Network Error"; msg.className = "msg error"; }
+                } else { msg.textContent = "❌ " + d.message; msg.className = "msg error"; }
+            } catch(e) { msg.textContent = "❌ Network Error"; msg.className = "msg error"; }
         }
 
-        // ✅ UPDATED SEND FUNCTION WITH WHATSAPP BUTTON
         async function send() {
             const id = document.getElementById('recv-id').value;
             const amt = parseFloat(document.getElementById('amt').value);
             const asset = document.getElementById('asset').value;
+            const receiverPhoneRaw = document.getElementById('recv-phone').value;
+            const senderPhoneRaw = document.getElementById('phone').value.trim();
             const msgDiv = document.getElementById('send-msg');
             
-            if(!id || !amt) { 
-                msgDiv.textContent = "Please find user and enter amount"; 
-                msgDiv.className = "msg error"; 
-                return; 
-            }
+            if(!id || !amt) { msgDiv.textContent = "⚠️ Please find a user and enter an amount."; msgDiv.className = "msg error"; return; }
 
-            msgDiv.innerHTML = "Processing...";
+            msgDiv.innerHTML = "⏳ Processing transaction on blockchain...";
             msgDiv.className = "msg";
 
             try {
@@ -186,37 +318,63 @@
 
                 if(d.success) {
                     const fee = d.data.treasury_fee;
-                    const receiverPhone = d.data.receiver_phone; 
+                    // Clean phone number for link (remove +, spaces, dashes)
+                    const cleanPhone = receiverPhoneRaw.replace(/[\+\-\s]/g, '');
+                    const txRef = "KS1-" + Math.floor(100000 + Math.random() * 900000);
                     
-                    // 1. Show Success Message
-                    msgDiv.innerHTML = `✅ Sent!<br>Fee: ${fee} ${asset.toUpperCase()}`;
-                    msgDiv.className = "msg success";
-                    
-                    // 2. Clear Input
-                    document.getElementById('amt').value = '';
+                    // 1. Construct Professional Personalized Message
+                    const messageText = `🔔 *KS1 P2P Gateway Notification*\n\n` +
+                        `Dear User,\n\n` +
+                        `You have successfully received a payment.\n\n` +
+                        `💰 *Amount:* ${amt} ${asset.toUpperCase()}\n` +
+                        `👤 *From:* ${senderPhoneRaw}\n` +
+                        `🆔 *Ref ID:* ${txRef}\n` +
+                        `📉 *Network Fee:* ${fee} ${asset.toUpperCase()}\n\n` +
+                        `Status: ✅ *Confirmed*\n\n` +
+                        `_Powered by KS1 EmpowerPay_`;
 
-                    // 3. CREATE WHATSAPP BUTTON
-                    const waText = `Hi! ✅ Payment Successful on KS1 P2P Gateway.%0A%0AI just sent you *${amt} ${asset.toUpperCase()}*.%0ARef: KS1-DEMO-${Math.floor(Math.random()*10000)}%0A%0APlease check your wallet balance.`;
-                    
-                    const waHTML = `
-                        <div class="wa-container">
-                            <span class="wa-label">📱 Notify Receiver</span>
-                            <a href="https://wa.me/${receiverPhone}?text=${waText}" target="_blank" class="wa-btn">
-                                Open WhatsApp & Send Receipt
-                            </a>
+                    // Encode for URL
+                    const encodedMsg = encodeURIComponent(messageText);
+                    const waLink = `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
+
+                    // 2. Display Success & Preview Card
+                    msgDiv.className = "msg success";
+                    msgDiv.innerHTML = `
+                        <div style="margin-bottom:15px; font-weight:600;">✅ <strong>Transaction Successful!</strong><br>Funds sent. Fee: ${fee} ${asset.toUpperCase()}</div>
+                        
+                        <div class="preview-card">
+                            <div class="preview-header">
+                                <span>📱</span> Ready to Send Receipt
+                            </div>
+                            <div class="preview-body">${messageText.replace(/\n/g, '<br>')}</div>
+                            <div class="preview-actions">
+                                <button class="btn-copy" onclick="copyToClipboard(\`${messageText.replace(/`/g, '\\`')}\`)">📋 Copy Text</button>
+                                <a href="${waLink}" target="_blank" class="btn-wa" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
+                                    <span>💬</span> Send via WhatsApp
+                                </a>
+                            </div>
                         </div>
                     `;
                     
-                    msgDiv.innerHTML += waHTML;
+                    document.getElementById('amt').value = '';
 
                 } else {
-                    msgDiv.textContent = "Failed: " + d.message;
+                    msgDiv.textContent = "❌ Failed: " + d.message;
                     msgDiv.className = "msg error";
                 }
             } catch(e) { 
-                msgDiv.textContent = "Network Error"; 
+                msgDiv.textContent = "❌ Network Error. Please try again."; 
                 msgDiv.className = "msg error"; 
             }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("✅ Message copied to clipboard!");
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert("Could not copy automatically. Please select text manually.");
+            });
         }
 
         async function loadTreasury() {
@@ -224,15 +382,14 @@
                 const r = await fetch(`${API}/api/v1/admin/treasury`, { headers: {'Authorization': `Bearer ${token}`} });
                 const d = await r.json();
                 if(d.success) {
-                    let info = d.data.map(i => `${i._id}: ${i.total}`).join(', ') || "Empty";
-                    alert("Treasury Stats:\n" + info);
+                    let info = d.data.length ? d.data.map(i => `${i._id}: ${i.total}`).join(', ') : "No transactions yet.";
+                    alert("🏦 Treasury Report:\n" + info);
                 }
             } catch(e) {}
         }
 
         function logout() {
-            localStorage.clear();
-            location.reload();
+            localStorage.clear(); location.reload();
         }
     </script>
 </body>
