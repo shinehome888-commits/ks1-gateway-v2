@@ -183,7 +183,6 @@
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Responsive adjustments */
         @media (max-width: 400px) {
             .preview-actions { flex-direction: column; }
             .btn-wa, .btn-copy { width: 100%; }
@@ -236,7 +235,6 @@
     </div>
 
     <script>
-        // ✅ YOUR LIVE BACKEND URL
         const API = "https://ks1-backend-v3.onrender.com";
         let token = localStorage.getItem('k_token');
         let role = localStorage.getItem('k_role');
@@ -318,11 +316,10 @@
 
                 if(d.success) {
                     const fee = d.data.treasury_fee;
-                    // Clean phone number for link (remove +, spaces, dashes)
                     const cleanPhone = receiverPhoneRaw.replace(/[\+\-\s]/g, '');
                     const txRef = "KS1-" + Math.floor(100000 + Math.random() * 900000);
                     
-                    // 1. Construct Professional Personalized Message
+                    // ✅ UPDATED MESSAGE FOOTER
                     const messageText = `🔔 *KS1 P2P Gateway Notification*\n\n` +
                         `Dear User,\n\n` +
                         `You have successfully received a payment.\n\n` +
@@ -331,13 +328,11 @@
                         `🆔 *Ref ID:* ${txRef}\n` +
                         `📉 *Network Fee:* ${fee} ${asset.toUpperCase()}\n\n` +
                         `Status: ✅ *Confirmed*\n\n` +
-                        `_Powered by KS1 EmpowerPay_`;
+                        `Powered by KS1 Empower Pay`;
 
-                    // Encode for URL
                     const encodedMsg = encodeURIComponent(messageText);
                     const waLink = `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
 
-                    // 2. Display Success & Preview Card
                     msgDiv.className = "msg success";
                     msgDiv.innerHTML = `
                         <div style="margin-bottom:15px; font-weight:600;">✅ <strong>Transaction Successful!</strong><br>Funds sent. Fee: ${fee} ${asset.toUpperCase()}</div>
