@@ -7,58 +7,93 @@
     <style>
         :root {
             --deep-blue: #0a192f;
-            --card-bg: #112240;
+            --royal-blue: #003366;
+            --white: #ffffff;
+            --off-white: #f4f7f6;
             --gold: #ffd700;
-            --gold-glow: rgba(255, 215, 0, 0.2);
-            --text-light: #e6f1ff;
-            --success: #64ffda;
+            --gold-dark: #b8860b;
+            --text-dark: #1a1a1a;
+            --text-grey: #555555;
+            --success: #008000; /* Darker green for white bg */
             --whatsapp: #25D366;
-            --error: #ff6b6b;
+            --error: #d32f2f; /* Darker red for white bg */
+            --shadow-soft: 0 10px 30px rgba(10, 25, 47, 0.15);
+            --shadow-gold: 0 4px 15px rgba(255, 215, 0, 0.4);
         }
+
         body { 
-            background: var(--deep-blue); 
-            color: var(--text-light); 
+            background: var(--off-white); 
+            color: var(--text-dark); 
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
             margin: 0; 
+            overflow-x: hidden;
+            position: relative;
         }
+
+        /* --- ROTATING DEEP BLUE GLOW BACKGROUND --- */
+        .glow-bg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 150vw;
+            height: 150vw;
+            background: radial-gradient(circle, rgba(10, 25, 47, 0.8) 0%, rgba(0, 51, 102, 0.4) 40%, transparent 70%);
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            animation: rotateGlow 10s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.1); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+        }
+
         .box { 
-            background: var(--card-bg); 
-            padding: 2.5rem 2rem; 
-            border-radius: 12px; 
-            border: 1px solid var(--gold); 
+            background: var(--white); 
+            padding: 3rem 2.5rem; 
+            border-radius: 20px; 
+            border: 1px solid rgba(255, 215, 0, 0.3); 
             width: 90%; 
             max-width: 450px; 
             text-align: center; 
-            box-shadow: 0 0 25px var(--gold-glow); 
+            box-shadow: var(--shadow-soft), 0 0 40px rgba(10, 25, 47, 0.2); 
             position: relative; 
             overflow: hidden; 
+            backdrop-filter: blur(10px);
         }
-        
-        /* Animated Background Glow */
-        .box::before { 
-            content: ''; 
-            position: absolute; 
-            top: -50%; left: -50%; 
-            width: 200%; height: 200%; 
-            background: linear-gradient(45deg, transparent, rgba(255,215,0,0.08), transparent); 
-            animation: rotate 8s linear infinite; 
-            z-index: -1; 
-        }
-        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        h1 { color: var(--gold); margin-top: 0; text-shadow: 0 0 12px rgba(255,215,0,0.4); font-size: 1.8rem; }
+        /* --- 3D TEXT EFFECTS --- */
+        h1 { 
+            color: var(--deep-blue); 
+            margin-top: 0; 
+            font-size: 2rem; 
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 
+                1px 1px 0px rgba(255, 215, 0, 0.5),
+                2px 2px 0px rgba(255, 215, 0, 0.3),
+                3px 3px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
         .brand { 
             font-size: 0.75rem; 
-            color: var(--success); 
-            margin-bottom: 25px; 
+            color: var(--royal-blue); 
+            margin-bottom: 30px; 
             letter-spacing: 1.5px; 
             text-transform: uppercase; 
-            font-weight: 600;
+            font-weight: 700;
             opacity: 0.9;
+            border-bottom: 2px solid var(--gold);
+            display: inline-block;
+            padding-bottom: 5px;
         }
         
         input, select, button { 
@@ -66,90 +101,113 @@
             padding: 14px; 
             margin: 10px 0; 
             border-radius: 8px; 
-            border: 1px solid var(--gold); 
-            background: var(--deep-blue); 
-            color: white; 
+            border: 1px solid #ddd; 
+            background: #fafafa; 
+            color: var(--text-dark); 
             box-sizing: border-box; 
             font-size: 1rem; 
             outline: none; 
             transition: all 0.3s ease; 
+            font-weight: 500;
         }
+
         input:focus, select:focus { 
-            box-shadow: 0 0 12px var(--gold-glow); 
-            border-color: var(--success); 
+            border-color: var(--deep-blue); 
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(10, 25, 47, 0.1);
             transform: translateY(-2px);
         }
         
+        /* --- 3D GOLD BUTTONS --- */
         button { 
-            background: linear-gradient(135deg, var(--gold), #b8860b); 
+            background: linear-gradient(to bottom, var(--gold), var(--gold-dark)); 
             color: #000; 
-            font-weight: 700; 
+            font-weight: 800; 
             cursor: pointer; 
             border: none; 
             text-transform: uppercase; 
             letter-spacing: 0.8px; 
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+            box-shadow: 
+                0 4px 0 #8b6508, 
+                0 5px 10px rgba(0,0,0,0.2);
+            transition: all 0.1s;
+            position: relative;
+            top: 0;
         }
+
         button:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4); 
+            filter: brightness(1.05);
         }
-        button:active { transform: translateY(1px); }
+
+        button:active { 
+            top: 4px;
+            box-shadow: 
+                0 0 0 #8b6508, 
+                inset 0 2px 5px rgba(0,0,0,0.2);
+        }
         
         button.secondary { 
             background: transparent; 
-            border: 1px solid var(--success); 
-            color: var(--success); 
+            border: 2px solid var(--deep-blue); 
+            color: var(--deep-blue); 
             text-transform: none; 
-            font-weight: 600;
+            font-weight: 700;
             box-shadow: none;
+            top: 0;
         }
         button.secondary:hover { 
-            background: rgba(100, 255, 218, 0.1); 
-            transform: none; 
-            box-shadow: 0 0 10px rgba(100, 255, 218, 0.2);
+            background: rgba(10, 25, 47, 0.05); 
+            top: 0;
+            box-shadow: none;
+        }
+        button.secondary:active {
+            top: 2px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .hidden { display: none; }
-        .msg { margin-top: 15px; font-size: 0.95rem; min-height: 24px; line-height: 1.5; }
-        .success { color: var(--success); font-weight: 500; }
-        .error { color: var(--error); font-weight: 500; }
+        
+        .msg { margin-top: 15px; font-size: 0.95rem; min-height: 24px; line-height: 1.5; font-weight: 600; }
+        .success { color: var(--success); }
+        .error { color: var(--error); }
 
-        /* --- PROFESSIONAL PREVIEW CARD STYLES --- */
+        /* --- PROFESSIONAL PREVIEW CARD (White Theme) --- */
         .preview-card {
             margin-top: 20px;
-            background: rgba(5, 15, 30, 0.9);
+            background: #f8f9fa;
             border: 1px solid var(--success);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 20px;
             text-align: left;
             animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
         .preview-header {
             color: var(--success);
             font-size: 0.9rem;
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+            border-bottom: 2px solid #e0e0e0;
             padding-bottom: 10px;
+            text-transform: uppercase;
         }
         .preview-body {
-            background: #020c1b;
+            background: #fff;
             padding: 15px;
             border-radius: 8px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.85rem;
-            color: #dcdcdc;
+            color: #333;
             white-space: pre-wrap; 
             border-left: 4px solid var(--whatsapp);
             margin-bottom: 20px;
             line-height: 1.6;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
         }
         .preview-actions {
             display: flex;
@@ -165,21 +223,27 @@
             gap: 10px;
             font-size: 0.95rem;
             border: none;
+            box-shadow: 0 4px 0 #1ebc57, 0 5px 10px rgba(37, 211, 102, 0.3);
+            top: 0;
         }
-        .btn-wa:hover { background: #1ebc57; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
+        .btn-wa:active { top: 4px; box-shadow: 0 0 0 #1ebc57; }
         
         .btn-copy {
-            background: transparent;
-            border: 1px solid var(--text-light);
-            color: var(--text-light);
+            background: #fff;
+            border: 2px solid var(--text-grey);
+            color: var(--text-grey);
             flex: 1;
             font-size: 0.85rem;
             padding: 12px;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.2s;
+            font-weight: 700;
+            box-shadow: 0 4px 0 #ddd, 0 5px 5px rgba(0,0,0,0.1);
+            top: 0;
         }
-        .btn-copy:hover { background: rgba(255,255,255,0.1); border-color: white; }
+        .btn-copy:active { top: 4px; box-shadow: 0 0 0 #ddd; }
+        .btn-copy:hover { border-color: var(--text-dark); color: var(--text-dark); }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -190,6 +254,10 @@
     </style>
 </head>
 <body>
+
+    <!-- Rotating Background Glow -->
+    <div class="glow-bg"></div>
+
     <div class="box">
         <h1>KS1 P2P Gateway</h1>
         <div class="brand">Non-custodial • Africa-first • Nonprofit-powered</div>
@@ -200,23 +268,24 @@
             <input type="password" id="pass" placeholder="Password" value="demo123">
             <button onclick="login()">🔐 Secure Login</button>
             <div id="login-msg" class="msg"></div>
-            <p style="font-size:0.75rem; color:#666; margin-top:20px;">Demo Credentials:<br>User: 233555123456 / demo123<br>Admin: 233555987654 / admin123</p>
+            <p style="font-size:0.75rem; color:#888; margin-top:20px; line-height: 1.4;">Demo Credentials:<br><strong>User:</strong> 233555123456 / demo123<br><strong>Admin:</strong> 233555987654 / admin123</p>
         </div>
 
         <!-- DASHBOARD VIEW -->
         <div id="dash-view" class="hidden">
-            <h2 id="welcome-msg" style="color:var(--gold); margin-bottom:5px;">Welcome</h2>
-            <div style="text-align:left; background:rgba(255,255,255,0.03); padding:20px; border-radius:10px; margin-bottom:25px; border-left: 5px solid var(--gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-                <div style="font-size:0.85rem; color:#8892b0; text-transform:uppercase; letter-spacing:1px;">Available Balance</div>
-                <div style="font-size:1.4rem; color:var(--gold); font-weight:800; margin-top:5px; text-shadow: 0 0 10px rgba(255,215,0,0.3);">
-                    💰 <span id="bal-usdc">0.00</span> USDC <br>
-                    <span style="font-size:1.2rem; color:#fff;">💎 <span id="bal-eth">0.00</span> ETH</span>
+            <h2 id="welcome-msg" style="color:var(--deep-blue); margin-bottom:5px; font-size: 1.5rem; text-shadow: 1px 1px 0 rgba(255,215,0,0.4);">Welcome</h2>
+            
+            <div style="text-align:left; background:#f8f9fa; padding:20px; border-radius:12px; margin-bottom:25px; border-left: 5px solid var(--gold); box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <div style="font-size:0.85rem; color:#666; text-transform:uppercase; letter-spacing:1px; font-weight:700;">Available Balance</div>
+                <div style="font-size:1.4rem; color:var(--deep-blue); font-weight:800; margin-top:5px;">
+                    💰 <span id="bal-usdc" style="color:var(--gold-dark);">0.00</span> USDC <br>
+                    <span style="font-size:1.2rem; color:#555;">💎 <span id="bal-eth">0.00</span> ETH</span>
                 </div>
             </div>
             
-            <label style="display:block; text-align:left; font-size:0.85rem; color:#8892b0; margin-bottom:8px; font-weight:600;">Receiver's WhatsApp Number</label>
+            <label style="display:block; text-align:left; font-size:0.85rem; color:#666; margin-bottom:8px; font-weight:700;">Receiver's WhatsApp Number</label>
             <input type="text" id="recv-phone" placeholder="+233..." value="">
-            <button onclick="findUser()" style="background:var(--success); color:#000; font-weight:700;">🔍 Find User</button>
+            <button onclick="findUser()" style="background: linear-gradient(to bottom, #4facfe, #00f2fe); color: #003366; font-weight:800; box-shadow: 0 4px 0 #008080, 0 5px 10px rgba(0,0,0,0.2);">🔍 Find User</button>
             <div id="find-msg" class="msg"></div>
             <input type="hidden" id="recv-id">
 
@@ -303,7 +372,7 @@
             
             if(!id || !amt) { msgDiv.textContent = "⚠️ Please find a user and enter an amount."; msgDiv.className = "msg error"; return; }
 
-            msgDiv.innerHTML = "⏳ Processing transaction on blockchain...";
+            msgDiv.innerHTML = "⏳ Processing transaction...";
             msgDiv.className = "msg";
 
             try {
@@ -319,7 +388,6 @@
                     const cleanPhone = receiverPhoneRaw.replace(/[\+\-\s]/g, '');
                     const txRef = "KS1-" + Math.floor(100000 + Math.random() * 900000);
                     
-                    // ✅ UPDATED MESSAGE FOOTER
                     const messageText = `🔔 *KS1 P2P Gateway Notification*\n\n` +
                         `Dear User,\n\n` +
                         `You have successfully received a payment.\n\n` +
@@ -335,7 +403,7 @@
 
                     msgDiv.className = "msg success";
                     msgDiv.innerHTML = `
-                        <div style="margin-bottom:15px; font-weight:600;">✅ <strong>Transaction Successful!</strong><br>Funds sent. Fee: ${fee} ${asset.toUpperCase()}</div>
+                        <div style="margin-bottom:15px; font-weight:700; color:var(--success);">✅ <strong>Transaction Successful!</strong><br>Funds sent. Fee: ${fee} ${asset.toUpperCase()}</div>
                         
                         <div class="preview-card">
                             <div class="preview-header">
