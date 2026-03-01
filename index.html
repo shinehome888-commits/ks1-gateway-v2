@@ -80,7 +80,7 @@
             border-radius: 20px; 
             border: 1px solid var(--border-color); 
             width: 90%; 
-            max-width: 480px; 
+            max-width: 500px; 
             text-align: center; 
             box-shadow: var(--shadow-soft); 
             position: relative; 
@@ -181,9 +181,15 @@
             transform: translateY(0);
         }
 
-        /* Specific overrides for layout */
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-group button { margin: 0; flex: 1; }
+        .btn-small {
+            width: auto;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            margin: 5px;
+        }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; justify-content: center;}
+        .btn-group button { margin: 5px; flex: 1; min-width: 120px; }
         
         .hidden { display: none; }
         
@@ -192,6 +198,8 @@
         .success { color: var(--deep-blue); } 
         body.dark-mode .success { color: var(--gold); }
         .error { color: #d32f2f; } 
+        .link-text { color: var(--royal-blue); text-decoration: underline; cursor: pointer; font-size: 0.9rem; margin-top: 10px; display: block; }
+        body.dark-mode .link-text { color: var(--gold); }
 
         /* --- REALISTIC BALANCE CARD --- */
         .balance-card {
@@ -211,27 +219,35 @@
             box-shadow: inset 0 0 20px rgba(0,0,0,0.3), 0 4px 10px rgba(0,0,0,0.2);
             border: 1px solid rgba(255, 215, 0, 0.2);
         }
-        .balance-label {
-            font-size: 0.85rem; 
-            color: var(--text-sub); 
-            text-transform: uppercase; 
-            letter-spacing: 1.2px; 
-            font-weight: 700;
-            display: block;
-            margin-bottom: 10px;
-        }
-        .balance-amount {
-            font-size: 1.6rem; 
-            color: var(--deep-blue); 
-            font-weight: 900; 
-            line-height: 1.4;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+        .balance-label { font-size: 0.85rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; display: block; margin-bottom: 10px; }
+        .balance-amount { font-size: 1.6rem; color: var(--deep-blue); font-weight: 900; line-height: 1.4; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         body.dark-mode .balance-amount { color: var(--gold); text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
         .balance-sub { font-size: 1.3rem; color: var(--text-sub); font-weight: 600; margin-top: 5px; display: block;}
         body.dark-mode .balance-sub { color: #8892b0; }
 
-        /* --- PROFESSIONAL PREVIEW CARD (Branded) --- */
+        /* --- USER LIST (Admin) --- */
+        .user-list {
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            margin-top: 15px;
+            background: var(--input-bg);
+        }
+        .user-item {
+            padding: 12px;
+            border-bottom: 1px solid var(--input-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        .user-item:last-child { border-bottom: none; }
+        .user-info strong { display: block; color: var(--text-main); }
+        .user-info span { font-size: 0.8rem; color: var(--text-sub); }
+        
+        /* --- PROFESSIONAL PREVIEW CARD --- */
         .preview-card {
             margin-top: 20px;
             background: var(--input-bg);
@@ -243,53 +259,17 @@
             position: relative;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        body.dark-mode .preview-card {
-            border-color: var(--gold);
-            background: rgba(10, 25, 47, 0.5);
-        }
-        .preview-header {
-            color: var(--deep-blue);
-            font-size: 0.9rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 2px solid var(--input-border);
-            padding-bottom: 10px;
-            text-transform: uppercase;
-        }
+        body.dark-mode .preview-card { border-color: var(--gold); background: rgba(10, 25, 47, 0.5); }
+        .preview-header { color: var(--deep-blue); font-size: 0.9rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid var(--input-border); padding-bottom: 10px; text-transform: uppercase; }
         body.dark-mode .preview-header { color: var(--gold); border-bottom-color: rgba(255,215,0,0.3); }
-        
-        .preview-body {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            white-space: pre-wrap; 
-            border-left: 4px solid var(--deep-blue);
-            margin-bottom: 20px;
-            line-height: 1.6;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid var(--input-border);
-        }
-        body.dark-mode .preview-body {
-            background: rgba(0,0,0,0.2);
-            border-left-color: var(--gold);
-        }
+        .preview-body { background: var(--card-bg); padding: 15px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; color: var(--text-main); white-space: pre-wrap; border-left: 4px solid var(--deep-blue); margin-bottom: 20px; line-height: 1.6; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid var(--input-border); }
+        body.dark-mode .preview-body { background: rgba(0,0,0,0.2); border-left-color: var(--gold); }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        @media (max-width: 400px) {
-            .btn-group { flex-direction: column; }
-        }
+        @media (max-width: 400px) { .btn-group { flex-direction: column; } .btn-group button { width: 100%; } }
     </style>
 </head>
 <body>
-
-    <!-- Rotating Background Glow -->
     <div class="glow-bg"></div>
 
     <div class="box">
@@ -298,50 +278,74 @@
         
         <!-- LOGIN VIEW -->
         <div id="login-view">
-            <input type="text" id="phone" placeholder="Phone Number (e.g. 233...)" value="233555123456">
-            <input type="password" id="pass" placeholder="Password" value="demo123">
-            <button onclick="login()">🔐 Secure Login</button>
-            <div id="login-msg" class="msg"></div>
-            <p style="font-size:0.75rem; color:var(--text-sub); margin-top:20px; line-height: 1.4;">Demo Credentials:<br><strong>User:</strong> 233555123456 / demo123<br><strong>Admin:</strong> 233555987654 / admin123</p>
+            <div id="login-form">
+                <input type="text" id="phone" placeholder="Phone Number (e.g. 233...)" value="233555123456">
+                <input type="password" id="pass" placeholder="Password" value="demo123">
+                <button onclick="login()">🔐 Secure Login</button>
+                <span class="link-text" onclick="showResetForm()">Forgot Password?</span>
+                <div id="login-msg" class="msg"></div>
+                <p style="font-size:0.75rem; color:var(--text-sub); margin-top:20px; line-height: 1.4;">Demo Credentials:<br><strong>User:</strong> 233555123456 / demo123<br><strong>Admin:</strong> 233555987654 / admin123</p>
+            </div>
+
+            <!-- RESET PASSWORD FORM -->
+            <div id="reset-form" class="hidden">
+                <h3 style="color:var(--deep-blue); margin-bottom:15px;">Reset Password</h3>
+                <p style="font-size:0.85rem; color:var(--text-sub); margin-bottom:15px;">Enter the code provided by Admin.</p>
+                <input type="text" id="reset-phone" placeholder="Your Phone Number" value="233555123456">
+                <input type="text" id="reset-code" placeholder="Code (e.g. KS1-1234)" style="text-transform:uppercase; letter-spacing:2px;">
+                <input type="password" id="new-password" placeholder="New Password">
+                <button onclick="resetPassword()">✅ Set New Password</button>
+                <button onclick="showLoginForm()" style="background:transparent; color:var(--text-sub); border:2px solid var(--text-sub); box-shadow:none;">Cancel</button>
+                <div id="reset-msg" class="msg"></div>
+            </div>
         </div>
 
         <!-- DASHBOARD VIEW -->
         <div id="dash-view" class="hidden">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                 <h2 id="welcome-msg" style="color:var(--deep-blue); margin:0; font-size: 1.5rem; text-shadow: 1px 1px 0 rgba(255,215,0,0.4);">Welcome</h2>
-                <!-- THEME TOGGLE (User Only) -->
                 <button id="theme-toggle" onclick="toggleTheme()" style="width:auto; padding:8px 12px; margin:0; font-size:0.8rem;">🌓 Theme</button>
             </div>
             
-            <!-- Realistic Balance Card -->
-            <div class="balance-card">
-                <span class="balance-label">Available Balance</span>
-                <div class="balance-amount">
-                    💰 <span id="bal-usdc" style="color:var(--gold-dark);">1,000.00</span> USDC
-                </div>
-                <span class="balance-sub">
-                    💎 <span id="bal-eth">5.00</span> ETH
-                </span>
+            <!-- Navigation Tabs -->
+            <div class="btn-group" id="nav-tabs" style="margin-bottom:20px;">
+                <button onclick="showTab('transfer')" id="tab-transfer">💸 Transfer</button>
+                <button onclick="showTab('users')" id="tab-users" class="hidden">👥 Manage Users</button>
             </div>
-            
-            <label style="display:block; text-align:left; font-size:0.85rem; color:var(--text-sub); margin-bottom:8px; font-weight:700;">Receiver's WhatsApp Number</label>
-            <input type="text" id="recv-phone" placeholder="+233..." value="">
-            
-            <div class="btn-group">
-                <button onclick="findUser()">🔍 Find User</button>
-            </div>
-            <div id="find-msg" class="msg"></div>
-            <input type="hidden" id="recv-id">
 
-            <div style="display:flex; gap:12px; margin-top:20px;">
-                <input type="number" id="amt" placeholder="Amount" style="flex:2;" step="0.01">
-                <select id="asset" style="flex:1; font-weight:600;"><option value="usdc">USDC</option><option value="eth">ETH</option></select>
+            <!-- TRANSFER TAB -->
+            <div id="tab-transfer-content">
+                <div class="balance-card">
+                    <span class="balance-label">Available Balance</span>
+                    <div class="balance-amount">💰 <span id="bal-usdc" style="color:var(--gold-dark);">1,000.00</span> USDC</div>
+                    <span class="balance-sub">💎 <span id="bal-eth">5.00</span> ETH</span>
+                </div>
+                
+                <label style="display:block; text-align:left; font-size:0.85rem; color:var(--text-sub); margin-bottom:8px; font-weight:700;">Receiver's WhatsApp Number</label>
+                <input type="text" id="recv-phone" placeholder="+233..." value="">
+                <div class="btn-group"><button onclick="findUser()">🔍 Find User</button></div>
+                <div id="find-msg" class="msg"></div>
+                <input type="hidden" id="recv-id">
+
+                <div style="display:flex; gap:12px; margin-top:20px;">
+                    <input type="number" id="amt" placeholder="Amount" style="flex:2;" step="0.01">
+                    <select id="asset" style="flex:1; font-weight:600;"><option value="usdc">USDC</option><option value="eth">ETH</option></select>
+                </div>
+                
+                <button onclick="send()" style="margin-top:15px; font-size:1.05rem;">🚀 Send Funds (1% Fee)</button>
+                <div id="send-msg" class="msg"></div>
             </div>
-            
-            <button onclick="send()" style="margin-top:15px; font-size:1.05rem;">🚀 Send Funds (1% Fee)</button>
-            
-            <!-- Dynamic Message Area -->
-            <div id="send-msg" class="msg"></div>
+
+            <!-- ADMIN USER MANAGEMENT TAB -->
+            <div id="tab-users-content" class="hidden">
+                <h3 style="color:var(--deep-blue); text-align:left;">Registered Users</h3>
+                <p style="font-size:0.85rem; color:var(--text-sub); text-align:left;">Generate a reset code for any user.</p>
+                <button onclick="loadUsers()" style="font-size:0.9rem;">🔄 Refresh List</button>
+                <div id="user-list-container" class="user-list">
+                    <div style="padding:20px; text-align:center; color:var(--text-sub);">Loading...</div>
+                </div>
+                <div id="admin-msg" class="msg"></div>
+            </div>
             
             <button onclick="logout()" style="margin-top:30px; background: transparent; color: var(--text-sub); border: 2px solid var(--text-sub); box-shadow: none; font-size: 0.9rem;">Logout</button>
         </div>
@@ -352,24 +356,30 @@
         let token = localStorage.getItem('k_token');
         let role = localStorage.getItem('k_role');
 
-        // Load Theme Preference
-        if(localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-        }
-
+        if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
         if(token) showDash();
 
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+
+        function showResetForm() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('reset-form').classList.remove('hidden');
+        }
+
+        function showLoginForm() {
+            document.getElementById('reset-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('reset-msg').textContent = '';
         }
 
         async function login() {
             const p = document.getElementById('phone').value.trim();
             const pw = document.getElementById('pass').value;
             const msg = document.getElementById('login-msg');
-            msg.textContent = "Authenticating securely...";
+            msg.textContent = "Authenticating...";
             try {
                 const r = await fetch(`${API}/api/v1/auth/login`, {
                     method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -379,10 +389,32 @@
                 if(d.success) {
                     token = d.data.token; role = d.data.user.role;
                     localStorage.setItem('k_token', token); localStorage.setItem('k_role', role);
-                    msg.textContent = "✅ Success! Redirecting..."; msg.className = "msg success";
+                    msg.textContent = "✅ Success!"; msg.className = "msg success";
                     setTimeout(showDash, 1000);
                 } else { msg.textContent = "❌ " + d.message; msg.className = "msg error"; }
             } catch(e) { msg.textContent = "❌ Connection Failed"; msg.className = "msg error"; }
+        }
+
+        async function resetPassword() {
+            const phone = document.getElementById('reset-phone').value.trim();
+            const code = document.getElementById('reset-code').value.trim();
+            const newPass = document.getElementById('new-password').value;
+            const msg = document.getElementById('reset-msg');
+
+            if(!phone || !code || !newPass) { msg.textContent = "⚠️ Fill all fields"; msg.className = "msg error"; return; }
+
+            msg.textContent = "Processing...";
+            try {
+                const r = await fetch(`${API}/api/v1/auth/reset-password`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ identifier: phone, code, newPassword: newPass })
+                });
+                const d = await r.json();
+                if(d.success) {
+                    msg.textContent = "✅ " + d.message; msg.className = "msg success";
+                    setTimeout(showLoginForm, 2000);
+                } else { msg.textContent = "❌ " + d.message; msg.className = "msg error"; }
+            } catch(e) { msg.textContent = "❌ Network Error"; msg.className = "msg error"; }
         }
 
         function showDash() {
@@ -390,31 +422,92 @@
             document.getElementById('dash-view').classList.remove('hidden');
             document.getElementById('welcome-msg').textContent = role === 'admin' ? '👑 Admin Dashboard' : '👤 User Dashboard';
             
-            // Hide theme toggle for Admin
             document.getElementById('theme-toggle').style.display = role === 'admin' ? 'none' : 'block';
-
-            if(role === 'user') {
+            
+            // Show/Hide Tabs
+            if(role === 'admin') {
+                document.getElementById('tab-users').classList.remove('hidden');
+                showTab('users'); // Default to users for admin
+            } else {
+                document.getElementById('tab-users').classList.add('hidden');
+                showTab('transfer');
                 document.getElementById('bal-usdc').textContent = "1,000.00";
                 document.getElementById('bal-eth').textContent = "5.00";
-            } else { 
-                document.getElementById('bal-usdc').textContent = "0.00";
-                document.getElementById('bal-eth').textContent = "0.00";
-                loadTreasury(); 
             }
+        }
+
+        function showTab(tabName) {
+            document.getElementById('tab-transfer-content').classList.add('hidden');
+            document.getElementById('tab-users-content').classList.add('hidden');
+            
+            if(tabName === 'transfer') {
+                document.getElementById('tab-transfer-content').classList.remove('hidden');
+            } else if (tabName === 'users') {
+                document.getElementById('tab-users-content').classList.remove('hidden');
+                loadUsers();
+            }
+        }
+
+        async function loadUsers() {
+            const container = document.getElementById('user-list-container');
+            const msg = document.getElementById('admin-msg');
+            container.innerHTML = '<div style="padding:20px; text-align:center;">Loading...</div>';
+            
+            try {
+                const r = await fetch(`${API}/api/v1/admin/users`, { headers: {'Authorization': `Bearer ${token}`} });
+                const d = await r.json();
+                if(d.success && d.data.users.length > 0) {
+                    let html = '';
+                    d.data.users.forEach(u => {
+                        html += `
+                            <div class="user-item">
+                                <div class="user-info">
+                                    <strong>${u.phone_number}</strong>
+                                    <span>${u.role.toUpperCase()} • Joined: ${new Date(u.createdAt).toLocaleDateString()}</span>
+                                </div>
+                                <button class="btn-small" onclick="generateCode('${u._id}', '${u.phone_number}')">🔑 Reset Code</button>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<div style="padding:20px; text-align:center;">No users found.</div>';
+                }
+            } catch(e) {
+                container.innerHTML = '<div style="padding:20px; text-align:center; color:red;">Error loading users.</div>';
+            }
+        }
+
+        async function generateCode(userId, phone) {
+            const msg = document.getElementById('admin-msg');
+            msg.textContent = "Generating...";
+            try {
+                const r = await fetch(`${API}/api/v1/admin/generate-reset-code`, {
+                    method: 'POST',
+                    headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`},
+                    body: JSON.stringify({ userId })
+                });
+                const d = await r.json();
+                if(d.success) {
+                    msg.innerHTML = `✅ Code for ${phone}: <strong style="font-size:1.2rem; color:var(--gold); background:var(--deep-blue); padding:5px 10px; border-radius:5px;">${d.data.resetCode}</strong><br><span style="font-size:0.8rem">Send this to the user.</span>`;
+                    msg.className = "msg success";
+                } else {
+                    msg.textContent = "❌ " + d.message; msg.className = "msg error";
+                }
+            } catch(e) { msg.textContent = "❌ Network Error"; msg.className = "msg error"; }
         }
 
         async function findUser() {
             const p = document.getElementById('recv-phone').value;
             const msg = document.getElementById('find-msg');
             if(!p) return;
-            msg.textContent = "🔍 Searching network...";
+            msg.textContent = "🔍 Searching...";
             try {
                 const r = await fetch(`${API}/api/v1/users/search?phone=${encodeURIComponent(p)}`, { headers: {'Authorization': `Bearer ${token}`} });
                 const d = await r.json();
                 if(d.success) {
                     document.getElementById('recv-id').value = d.data.userId;
-                    msg.innerHTML = `✅ <strong>Verified:</strong> ${d.data.phone}`;
-                    msg.className = "msg success";
+                    msg.innerHTML = `✅ <strong>Verified:</strong> ${d.data.phone}`; msg.className = "msg success";
                 } else { msg.textContent = "❌ " + d.message; msg.className = "msg error"; }
             } catch(e) { msg.textContent = "❌ Network Error"; msg.className = "msg error"; }
         }
@@ -427,11 +520,9 @@
             const senderPhoneRaw = document.getElementById('phone').value.trim();
             const msgDiv = document.getElementById('send-msg');
             
-            if(!id || !amt) { msgDiv.textContent = "⚠️ Please find a user and enter an amount."; msgDiv.className = "msg error"; return; }
+            if(!id || !amt) { msgDiv.textContent = "⚠️ Find user & enter amount."; msgDiv.className = "msg error"; return; }
 
-            msgDiv.innerHTML = "⏳ Processing transaction...";
-            msgDiv.className = "msg";
-
+            msgDiv.innerHTML = "⏳ Processing..."; msgDiv.className = "msg";
             try {
                 const r = await fetch(`${API}/api/v1/p2p/transfer`, {
                     method: 'POST',
@@ -439,76 +530,35 @@
                     body: JSON.stringify({ receiverId: id, asset, amount: amt })
                 });
                 const d = await r.json();
-
                 if(d.success) {
                     const fee = d.data.treasury_fee;
                     const cleanPhone = receiverPhoneRaw.replace(/[\+\-\s]/g, '');
                     const txRef = "KS1-" + Math.floor(100000 + Math.random() * 900000);
-                    
-                    const messageText = `🔔 *KS1 P2P Gateway Notification*\n\n` +
-                        `Dear User,\n\n` +
-                        `You have successfully received a payment.\n\n` +
-                        `💰 *Amount:* ${amt} ${asset.toUpperCase()}\n` +
-                        `👤 *From:* ${senderPhoneRaw}\n` +
-                        `🆔 *Ref ID:* ${txRef}\n` +
-                        `📉 *Network Fee:* ${fee} ${asset.toUpperCase()}\n\n` +
-                        `Status: ✅ *Confirmed*\n\n` +
-                        `Powered by KS1 Empower Pay`;
-
-                    const encodedMsg = encodeURIComponent(messageText);
-                    const waLink = `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
+                    const messageText = `🔔 *KS1 P2P Gateway Notification*\n\nDear User,\n\nYou received ${amt} ${asset.toUpperCase()}.\nFrom: ${senderPhoneRaw}\nRef: ${txRef}\nFee: ${fee}\nStatus: ✅ Confirmed\n\nPowered by KS1 Empower Pay`;
+                    const waLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(messageText)}`;
 
                     msgDiv.className = "msg success";
-                    // Updated Buttons to be Gold and Flexible
                     msgDiv.innerHTML = `
-                        <div style="margin-bottom:15px; font-weight:700;">✅ <strong>Transaction Successful!</strong><br>Funds sent. Fee: ${fee} ${asset.toUpperCase()}</div>
-                        
+                        <div style="margin-bottom:15px; font-weight:700;">✅ <strong>Success!</strong><br>Fee: ${fee} ${asset.toUpperCase()}</div>
                         <div class="preview-card">
-                            <div class="preview-header">
-                                <span>📱</span> Ready to Send Receipt
-                            </div>
+                            <div class="preview-header"><span>📱</span> Ready to Send Receipt</div>
                             <div class="preview-body">${messageText.replace(/\n/g, '<br>')}</div>
                             <div class="btn-group">
-                                <button onclick="copyToClipboard(\`${messageText.replace(/`/g, '\\`')}\`)" style="margin:0;">📋 Copy Text</button>
-                                <a href="${waLink}" target="_blank" style="margin:0; text-decoration:none;">💬 Send via WhatsApp</a>
+                                <button onclick="copyToClipboard(\`${messageText.replace(/`/g, '\\`')}\`)" style="margin:0;">📋 Copy</button>
+                                <a href="${waLink}" target="_blank" style="margin:0; text-decoration:none;">💬 WhatsApp</a>
                             </div>
                         </div>
                     `;
-                    
                     document.getElementById('amt').value = '';
-
-                } else {
-                    msgDiv.textContent = "❌ Failed: " + d.message;
-                    msgDiv.className = "msg error";
-                }
-            } catch(e) { 
-                msgDiv.textContent = "❌ Network Error. Please try again."; 
-                msgDiv.className = "msg error"; 
-            }
+                } else { msgDiv.textContent = "❌ " + d.message; msgDiv.className = "msg error"; }
+            } catch(e) { msgDiv.textContent = "❌ Network Error"; msgDiv.className = "msg error"; }
         }
 
         function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert("✅ Message copied to clipboard!");
-            }).catch(err => {
-                alert("Could not copy automatically. Please select text manually.");
-            });
+            navigator.clipboard.writeText(text).then(() => alert("✅ Copied!")).catch(() => alert("Copy failed."));
         }
 
-        async function loadTreasury() {
-            try {
-                const r = await fetch(`${API}/api/v1/admin/treasury`, { headers: {'Authorization': `Bearer ${token}`} });
-                const d = await r.json();
-                if(d.success) {
-                    let info = d.data.length ? d.data.map(i => `${i._id}: ${i.total}`).join(', ') : "No transactions yet.";
-                    alert("🏦 Treasury Report:\n" + info);
-                }
-            } catch(e) {}
-        }
-
-        function logout() {
-            localStorage.clear(); location.reload();
-        }
+        function logout() { localStorage.clear(); location.reload(); }
     </script>
 </body>
 </html>
