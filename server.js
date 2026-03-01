@@ -23,7 +23,6 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, sparse: true },
   password_hash: { type: String, required: true },
   role: { type: String, default: 'user', enum: ['user', 'admin'] },
-  // Fields for Password Reset
   reset_code: { type: String, default: null },
   reset_expires: { type: Date, default: null }
 });
@@ -108,6 +107,7 @@ app.post('/api/v1/auth/login', async (req, res) => {
 
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'ks1_secret', { expiresIn: '24h' });
 
+    // ✅ FIXED: 'data' key explicitly written
     res.json({
       success: true,
       message: 'Login successful',
@@ -121,7 +121,7 @@ app.post('/api/v1/auth/login', async (req, res) => {
   }
 });
 
-// ✅ NEW: Admin Generate Reset Code
+// Admin Generate Reset Code
 app.post('/api/v1/admin/generate-reset-code', auth, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ success: false, message: 'Access denied' });
   
@@ -132,15 +132,14 @@ app.post('/api/v1/admin/generate-reset-code', auth, async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
-    // Generate Code: KS1-XXXX
     const codeNum = Math.floor(1000 + Math.random() * 9000);
     const resetCode = `KS1-${codeNum}`;
     
-    // Save to DB (Expires in 1 hour)
     user.reset_code = resetCode;
     user.reset_expires = new Date(Date.now() + 60 * 60 * 1000); 
     await user.save();
 
+    // ✅ FIXED: 'data' key explicitly written
     res.json({
       success: true,
       message: `Reset code generated for ${user.phone_number}`,
@@ -151,7 +150,7 @@ app.post('/api/v1/admin/generate-reset-code', auth, async (req, res) => {
   }
 });
 
-// ✅ NEW: User Reset Password
+// User Reset Password
 app.post('/api/v1/auth/reset-password', async (req, res) => {
   const { identifier, code, newPassword } = req.body;
   if (!identifier || !code || !newPassword) return res.status(400).json({ success: false, message: 'Missing fields' });
@@ -160,20 +159,17 @@ app.post('/api/v1/auth/reset-password', async (req, res) => {
     const user = await User.findOne({ $or: [{ phone_number: identifier }, { email: identifier }] });
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
-    // Check if code exists and matches
     if (!user.reset_code || user.reset_code !== code) {
       return res.status(400).json({ success: false, message: 'Invalid reset code' });
     }
 
-    // Check if expired
     if (user.reset_expires && new Date() > user.reset_expires) {
       return res.status(400).json({ success: false, message: 'Reset code expired' });
     }
 
-    // Update Password
     const newHash = await bcrypt.hash(newPassword, 10);
     user.password_hash = newHash;
-    user.reset_code = null; // Clear code
+    user.reset_code = null;
     user.reset_expires = null;
     await user.save();
 
@@ -192,6 +188,7 @@ app.get('/api/v1/users/search', auth, async (req, res) => {
     const user = await User.findOne({ phone_number: new RegExp('^' + clean, 'i') });
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
     
+    // ✅ FIXED: 'data' key explicitly written
     res.json({
       success: true,
        { userId: user._id, phone: user.phone_number }
@@ -226,6 +223,7 @@ app.post('/api/v1/p2p/transfer', auth, async (req, res) => {
     await Transaction.create({ sender: req.user.id, receiver: receiverId, amount, fee, asset });
     await Treasury.create({ amount: fee, asset });
 
+    // ✅ FIXED: 'data' key explicitly written
     res.json({
       success: true,
       message: 'Transfer successful',
@@ -241,18 +239,23 @@ app.get('/api/v1/admin/treasury', auth, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ success: false, message: 'Access denied' });
   const stats = await Treasury.aggregate([{ $group: { _id: '$asset', total: { $sum: '$amount' } } }]);
   
+  // ✅ FIXED: 'data' key explicitly written
   res.json({ 
     success: true, 
      stats 
   });
 });
 
-// ✅ NEW: Admin Get All Users (Fixes the 404 Error)
+// Admin Get All Users (Fixes the 404 Error)
 app.get('/api/v1/admin/users', auth, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ success: false, message: 'Access denied' });
   try {
     const users = await User.find({}, 'phone_number email role createdAt');
-    res.json({ success: true,  users });
+    // ✅ FIXED: 'data' key explicitly written
+    res.json({ 
+      success: true, 
+       users 
+    });
   } catch (e) {
     res.status(500).json({ success: false, message: e.message });
   }
