@@ -21,43 +21,177 @@
         .glow-bg { position: fixed; top: 50%; left: 50%; width: 150vw; height: 150vw; background: radial-gradient(circle, var(--glow-color) 0%, transparent 60%); transform: translate(-50%, -50%); z-index: -1; animation: rotateGlow 12s linear infinite; opacity: 0.8; }
         @keyframes rotateGlow { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
         .box { background: var(--card-bg); padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border-color); width: 90%; max-width: 500px; text-align: center; box-shadow: var(--shadow-soft); position: relative; overflow: hidden; backdrop-filter: blur(10px); }
-        h1 { color: var(--deep-blue); font-size: 2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; text-shadow: 1px 1px 0 rgba(255,215,0,0.5); }
-        body.dark-mode h1 { color: var(--gold); text-shadow: 0 0 15px rgba(255,215,0,0.4); }
-        .brand { font-size: 0.75rem; color: var(--royal-blue); margin-bottom: 30px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; }
-        body.dark-mode .brand { color: var(--gold); }
-        input, select { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text-main); box-sizing: border-box; font-size: 1rem; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(255,215,0,0.2); }
-        button { width: 100%; background: linear-gradient(to bottom, var(--gold), var(--gold-dark)); color: #000; font-weight: 800; border: none; border-radius: 8px; padding: 14px; margin: 10px 0; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 0 var(--gold-shadow), 0 5px 10px rgba(0,0,0,0.2); transition: 0.1s; position: relative; top: 0; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
-        button:hover { filter: brightness(1.05); transform: translateY(-2px); }
-        button:active { top: 4px; box-shadow: 0 0 0 var(--gold-shadow); }
-        .btn-small { width: auto; padding: 8px 15px; font-size: 0.85rem; margin: 5px; }
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
-        .btn-group button { margin: 5px; flex: 1; min-width: 120px; }
+
+        /* --- ENHANCED 3D GOLD BUTTONS --- */
+        button { 
+            width: 100%;
+            background: linear-gradient(to bottom, var(--gold), var(--gold-dark)); 
+            color: #000; 
+            font-weight: 800; 
+            border: none; 
+            border-radius: 10px; /* More rounded */
+            padding: 16px; /* Increased padding for flexibility */
+            margin: 12px 0; /* Slightly more spacing */
+            cursor: pointer; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; /* Enhanced */
+            box-shadow: 
+                0 6px 0 var(--gold-shadow), /* Deeper 3D shadow */
+                0 8px 20px rgba(0,0,0,0.25); /* Softer glow */
+            transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1); /* Smoother flex */
+            position: relative;
+            top: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            font-size: 1.05rem; /* Slightly larger */
+        }
+
+        button:hover { 
+            filter: brightness(1.08);
+            transform: translateY(-3px) scale(1.02); /* More lift & flex */
+            box-shadow: 
+                0 8px 0 var(--gold-shadow), 
+                0 12px 25px rgba(0,0,0,0.3);
+        }
+
+        button:active { 
+            top: 6px; /* Deeper press */
+            box-shadow: 
+                0 0 0 var(--gold-shadow), 
+                inset 0 4px 10px rgba(0,0,0,0.25);
+            transform: scale(0.98);
+        }
+
+        /* Small buttons (like Reset Code) */
+        .btn-small { 
+            width: auto; 
+            padding: 10px 18px; 
+            font-size: 0.9rem; 
+            margin: 6px;
+            border-radius: 8px;
+        }
+
+        .btn-group { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; justify-content: center; }
+        .btn-group button { margin: 6px; flex: 1; min-width: 130px; }
+        
         .hidden { display: none; }
-        .msg { margin-top: 15px; font-size: 0.95rem; font-weight: 600; color: var(--deep-blue); }
+        
+        .msg { margin-top: 18px; font-size: 0.95rem; font-weight: 600; color: var(--deep-blue); }
         body.dark-mode .msg { color: var(--gold); }
-        .success { color: var(--deep-blue); } body.dark-mode .success { color: var(--gold); }
+        .success { color: var(--deep-blue); } 
+        body.dark-mode .success { color: var(--gold); }
         .error { color: #d32f2f; }
-        .link-text { color: var(--royal-blue); text-decoration: underline; cursor: pointer; margin-top: 10px; display: block; }
+        .link-text { color: var(--royal-blue); text-decoration: underline; cursor: pointer; margin-top: 12px; display: block; }
         body.dark-mode .link-text { color: var(--gold); }
-        .balance-card { text-align: left; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); padding: 25px; border-radius: 15px; margin-bottom: 25px; border-left: 6px solid var(--gold); box-shadow: inset 0 0 20px rgba(0,0,0,0.05); border: 1px solid rgba(255,215,0,0.1); }
-        body.dark-mode .balance-card { background: linear-gradient(135deg, rgba(10,25,47,0.8), rgba(17,34,64,0.8)); border: 1px solid rgba(255,215,0,0.2); }
-        .balance-label { font-size: 0.85rem; color: var(--text-sub); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 10px; }
-        .balance-amount { font-size: 1.6rem; color: var(--deep-blue); font-weight: 900; }
-        body.dark-mode .balance-amount { color: var(--gold); text-shadow: 0 0 10px rgba(255,215,0,0.3); }
-        .balance-sub { font-size: 1.3rem; color: var(--text-sub); font-weight: 600; display: block; margin-top: 5px; }
+
+        .balance-card { 
+            text-align: left; 
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); 
+            padding: 28px; 
+            border-radius: 16px; 
+            margin-bottom: 28px; 
+            border-left: 6px solid var(--gold); 
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        body.dark-mode .balance-card { 
+            background: linear-gradient(135deg, rgba(10,25,47,0.8), rgba(17,34,64,0.8));
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        .balance-label { font-size: 0.85rem; color: var(--text-sub); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 12px; }
+        .balance-amount { font-size: 1.65rem; color: var(--deep-blue); font-weight: 900; }
+        body.dark-mode .balance-amount { color: var(--gold); text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+        .balance-sub { font-size: 1.35rem; color: var(--text-sub); font-weight: 600; display: block; margin-top: 6px; }
         body.dark-mode .balance-sub { color: #8892b0; }
-        .user-list { text-align: left; max-height: 300px; overflow-y: auto; border: 1px solid var(--input-border); border-radius: 8px; margin-top: 15px; background: var(--input-bg); }
-        .user-item { padding: 12px; border-bottom: 1px solid var(--input-border); display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
+
+        .user-list { 
+            text-align: left; 
+            max-height: 300px; 
+            overflow-y: auto; 
+            border: 1px solid var(--input-border); 
+            border-radius: 10px; 
+            margin-top: 18px; 
+            background: var(--input-bg);
+        }
+        .user-item { 
+            padding: 14px; 
+            border-bottom: 1px solid var(--input-border); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 0.92rem;
+        }
+        .user-item:last-child { border-bottom: none; }
         .user-info strong { display: block; color: var(--text-main); }
-        .user-info span { font-size: 0.8rem; color: var(--text-sub); }
-        .preview-card { margin-top: 20px; background: var(--input-bg); border: 2px solid var(--deep-blue); border-radius: 12px; padding: 20px; text-align: left; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        body.dark-mode .preview-card { border-color: var(--gold); background: rgba(10,25,47,0.5); }
-        .preview-header { color: var(--deep-blue); font-size: 0.9rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid var(--input-border); padding-bottom: 10px; text-transform: uppercase; }
-        body.dark-mode .preview-header { color: var(--gold); border-bottom-color: rgba(255,215,0,0.3); }
-        .preview-body { background: var(--card-bg); padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: var(--text-main); white-space: pre-wrap; border-left: 4px solid var(--deep-blue); margin-bottom: 20px; border: 1px solid var(--input-border); }
-        body.dark-mode .preview-body { background: rgba(0,0,0,0.2); border-left-color: var(--gold); }
-        .debug-error { background: #fff8f8; border-left: 4px solid #ff6b6b; padding: 12px; border-radius: 0 8px 8px 0; margin: 10px 0; font-family: monospace; font-size: 0.85rem; text-align: left; }
+        .user-info span { font-size: 0.82rem; color: var(--text-sub); }
+        
+        .preview-card { 
+            margin-top: 22px; 
+            background: var(--input-bg); 
+            border: 2px solid var(--deep-blue); 
+            border-radius: 14px; 
+            padding: 22px; 
+            text-align: left; 
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        }
+        body.dark-mode .preview-card { 
+            border-color: var(--gold); 
+            background: rgba(10, 25, 47, 0.5);
+        }
+        .preview-header { 
+            color: var(--deep-blue); 
+            font-size: 0.92rem; 
+            font-weight: 800; 
+            margin-bottom: 16px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            border-bottom: 2px solid var(--input-border); 
+            padding-bottom: 10px; 
+            text-transform: uppercase;
+        }
+        body.dark-mode .preview-header { 
+            color: var(--gold); 
+            border-bottom-color: rgba(255,215,0,0.3);
+        }
+        .preview-body { 
+            background: var(--card-bg); 
+            padding: 16px; 
+            border-radius: 10px; 
+            font-family: monospace; 
+            font-size: 0.87rem; 
+            color: var(--text-main); 
+            white-space: pre-wrap; 
+            border-left: 4px solid var(--deep-blue); 
+            margin-bottom: 20px; 
+            border: 1px solid var(--input-border);
+        }
+        body.dark-mode .preview-body { 
+            background: rgba(0,0,0,0.2); 
+            border-left-color: var(--gold);
+        }
+
+        /* --- 3D GOLD DASHBOARD TITLES --- */
+        .dashboard-title {
+            color: var(--gold);
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-shadow: 
+                1px 1px 0 rgba(0,0,0,0.2),
+                2px 2px 0 rgba(0,0,0,0.1),
+                0 0 15px rgba(255, 215, 0, 0.4);
+            margin: 0;
+            letter-spacing: 0.5px;
+            text-align: left;
+        }
+        body.dark-mode .dashboard-title {
+            text-shadow: 
+                1px 1px 0 rgba(0,0,0,0.3),
+                0 0 20px rgba(255, 215, 0, 0.6);
+        }
     </style>
 </head>
 <body>
@@ -87,9 +221,10 @@
         </div>
 
         <div id="dash-view" class="hidden">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <h2 id="welcome-msg" style="color:var(--deep-blue); margin:0; font-size:1.5rem;">Welcome</h2>
-                <button id="theme-toggle" onclick="toggleTheme()" style="width:auto; padding:8px 12px; margin:0; font-size:0.8rem;">🌓 Theme</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <!-- ✅ 3D GOLD TITLE -->
+                <h2 id="welcome-msg" class="dashboard-title">Welcome</h2>
+                <button id="theme-toggle" onclick="toggleTheme()" class="btn-small">🌓 Theme</button>
             </div>
             
             <div class="btn-group" id="nav-tabs" style="margin-bottom:20px;"></div>
@@ -115,15 +250,16 @@
 
             <div id="admin-dashboard-content" class="hidden">
                 <div style="text-align:left; margin-bottom:20px;">
-                    <h3 style="color:var(--deep-blue); margin:0;">👑 Admin Controls</h3>
+                    <h3 class="dashboard-title" style="font-size:1.4rem;">👑 Admin Controls</h3>
                     <p style="font-size:0.9rem; color:var(--text-sub); margin:5px 0;">Manage users and system security.</p>
                 </div>
-                <button onclick="loadUsers()" style="font-size:0.95rem; margin-bottom:15px;">👥 Manage Users</button>
+                <button onclick="loadUsers()" style="margin-bottom:15px;">👥 Manage Users</button>
                 <div id="user-list-container" class="user-list"></div>
                 <div id="admin-msg" class="msg"></div>
             </div>
             
-            <button onclick="logout()" style="margin-top:30px; background:transparent; color:var(--text-sub); border:2px solid var(--text-sub); box-shadow:none;">Logout</button>
+            <!-- ✅ LOGOUT BUTTON NOW GOLD 3D -->
+            <button onclick="logout()" style="margin-top:30px;">Logout</button>
         </div>
     </div>
 
@@ -219,7 +355,7 @@
             if(role === 'admin') {
                 document.getElementById('welcome-msg').textContent = '👑 Admin Dashboard';
                 document.getElementById('admin-dashboard-content').classList.remove('hidden');
-                loadUsers(); // Load hardcoded users
+                loadUsers();
             } else {
                 document.getElementById('welcome-msg').textContent = '👤 User Dashboard';
                 document.getElementById('user-dashboard-content').classList.remove('hidden');
@@ -228,7 +364,6 @@
             }
         }
 
-        // ✅ HARD-CODED USER LIST (NO BACKEND CALL)
         async function loadUsers() {
             const container = document.getElementById('user-list-container');
             const demoUsers = [
@@ -247,7 +382,6 @@
             container.innerHTML = html;
         }
 
-        // ✅ SIMULATED RESET CODE GENERATION
         async function generateCode(phone) {
             const msg = document.getElementById('admin-msg');
             const codeNum = Math.floor(1000 + Math.random() * 9000);
@@ -315,7 +449,8 @@
                             <div class="preview-body">${messageText.replace(/\n/g, '<br>')}</div>
                             <div class="btn-group">
                                 <button onclick="copyToClipboard(\`${messageText.replace(/`/g, '\\`')}\`)" style="margin:0;">📋 Copy</button>
-                                <a href="${waLink}" target="_blank" style="margin:0; text-decoration:none;">💬 WhatsApp</a>
+                                <!-- ✅ WHATSAPP BUTTON NOW GOLD 3D -->
+                                <a href="${waLink}" target="_blank" style="margin:0; text-decoration:none; width:100%;">💬 WhatsApp</a>
                             </div>
                         </div>
                     `;
