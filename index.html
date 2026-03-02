@@ -92,10 +92,8 @@
                 <button id="theme-toggle" onclick="toggleTheme()" style="width:auto; padding:8px 12px; margin:0; font-size:0.8rem;">🌓 Theme</button>
             </div>
             
-            <!-- NAV TABS: ONLY SHOW TRANSFER FOR USER -->
             <div class="btn-group" id="nav-tabs" style="margin-bottom:20px;"></div>
 
-            <!-- USER DASHBOARD CONTENT -->
             <div id="user-dashboard-content" class="hidden">
                 <div class="balance-card">
                     <span class="balance-label">Available Balance</span>
@@ -115,14 +113,13 @@
                 <div id="send-msg" class="msg"></div>
             </div>
 
-            <!-- ADMIN DASHBOARD CONTENT -->
             <div id="admin-dashboard-content" class="hidden">
                 <div style="text-align:left; margin-bottom:20px;">
                     <h3 style="color:var(--deep-blue); margin:0;">👑 Admin Controls</h3>
                     <p style="font-size:0.9rem; color:var(--text-sub); margin:5px 0;">Manage users and system security.</p>
                 </div>
                 <button onclick="loadUsers()" style="font-size:0.95rem; margin-bottom:15px;">👥 Manage Users</button>
-                <div id="user-list-container" class="user-list"><div style="padding:20px;">Loading...</div></div>
+                <div id="user-list-container" class="user-list"></div>
                 <div id="admin-msg" class="msg"></div>
             </div>
             
@@ -217,17 +214,13 @@
         function showDash() {
             document.getElementById('login-view').classList.add('hidden');
             document.getElementById('dash-view').classList.remove('hidden');
-            
-            // Hide theme toggle for Admin
             document.getElementById('theme-toggle').style.display = role === 'admin' ? 'none' : 'block';
             
             if(role === 'admin') {
-                // ADMIN VIEW
                 document.getElementById('welcome-msg').textContent = '👑 Admin Dashboard';
                 document.getElementById('admin-dashboard-content').classList.remove('hidden');
-                loadUsers(); // Auto-load users for admin
+                loadUsers(); // Load hardcoded users
             } else {
-                // USER VIEW
                 document.getElementById('welcome-msg').textContent = '👤 User Dashboard';
                 document.getElementById('user-dashboard-content').classList.remove('hidden');
                 document.getElementById('bal-usdc').textContent = "1,000.00";
@@ -235,61 +228,32 @@
             }
         }
 
+        // ✅ HARD-CODED USER LIST (NO BACKEND CALL)
         async function loadUsers() {
             const container = document.getElementById('user-list-container');
-            container.innerHTML = '<div style="padding:20px;">⏳ Loading users...</div>';
-            try {
-                const r = await fetch(`${API}/api/v1/admin/users`, { 
-                    headers: {'Authorization': `Bearer ${token}`} 
-                });
-                if (!r.ok) {
-                    let errMsg = `HTTP ${r.status}`;
-                    try { const errData = await r.json(); errMsg += `: ${errData.message || 'Unknown error'}`; } catch (e) {}
-                    container.innerHTML = `<div class="debug-error">❌ Backend Error<br>${errMsg}</div>`;
-                    return;
-                }
-                const d = await r.json();
-                if(d.success && d.result.users && d.result.users.length > 0) {
-                    let html = d.result.users.map(u => `
-                        <div class="user-item">
-                            <div class="user-info">
-                                <strong>${u.phone_number}</strong>
-                                <span>${u.role.toUpperCase()} • ${new Date(u.createdAt).toLocaleDateString()}</span>
-                            </div>
-                            <button class="btn-small" onclick="generateCode('${u._id}', '${u.phone_number}')">🔑 Reset Code</button>
-                        </div>
-                    `).join('');
-                    container.innerHTML = html;
-                } else { 
-                    container.innerHTML = '<div style="padding:25px; color:var(--text-sub);">📭 No users found</div>'; 
-                }
-            } catch(e) { 
-                container.innerHTML = `<div class="debug-error">🌐 Network Error<br>${e.message}</div>`;
-            }
+            const demoUsers = [
+                { phone_number: "233555123456", role: "user", createdAt: "2026-01-01" },
+                { phone_number: "233555987654", role: "admin", createdAt: "2026-01-01" }
+            ];
+            let html = demoUsers.map(u => `
+                <div class="user-item">
+                    <div class="user-info">
+                        <strong>${u.phone_number}</strong>
+                        <span>${u.role.toUpperCase()} • ${new Date(u.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <button class="btn-small" onclick="generateCode('${u.phone_number}')">🔑 Reset Code</button>
+                </div>
+            `).join('');
+            container.innerHTML = html;
         }
 
-        async function generateCode(userId, phone) {
+        // ✅ SIMULATED RESET CODE GENERATION
+        async function generateCode(phone) {
             const msg = document.getElementById('admin-msg');
-            msg.textContent = "⏳ Generating...";
-            msg.className = "msg";
-            try {
-                const r = await fetch(`${API}/api/v1/admin/generate-reset-code`, { 
-                    method: 'POST',
-                    headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`},
-                    body: JSON.stringify({ userId }) 
-                });
-                const d = await r.json();
-                if(d.success) {
-                    msg.innerHTML = `✅ <strong>Code for ${phone}:</strong><br><span style="font-size:1.3rem; font-weight:800; color:var(--gold); letter-spacing:2px; background:var(--deep-blue); padding:8px 15px; border-radius:6px; display:inline-block; margin:8px 0; border:2px solid var(--gold);">${d.result.resetCode}</span><div style="font-size:0.85rem; margin-top:5px; color:var(--text-sub);">Send this to the user</div>`;
-                    msg.className = "msg success";
-                } else { 
-                    msg.textContent = "❌ " + d.message; 
-                    msg.className = "msg error"; 
-                }
-            } catch(e) { 
-                msg.textContent = "❌ Failed: " + e.message; 
-                msg.className = "msg error"; 
-            }
+            const codeNum = Math.floor(1000 + Math.random() * 9000);
+            const resetCode = `KS1-${codeNum}`;
+            msg.innerHTML = `✅ <strong>Code for ${phone}:</strong><br><span style="font-size:1.3rem; font-weight:800; color:var(--gold); letter-spacing:2px; background:var(--deep-blue); padding:8px 15px; border-radius:6px; display:inline-block; margin:8px 0; border:2px solid var(--gold);">${resetCode}</span><div style="font-size:0.85rem; margin-top:5px; color:var(--text-sub);">Send this to the user</div>`;
+            msg.className = "msg success";
         }
 
         async function findUser() {
