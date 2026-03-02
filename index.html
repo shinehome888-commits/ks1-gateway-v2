@@ -14,7 +14,6 @@
         }
         body.dark-mode {
             --bg-color: #050f1e; --card-bg: #112240; --text-main: #e6f1ff; --text-sub: #8892b0;
-            --glow-color: rgba(255, 255, 255, 0.1); /* White glow base */
             --border-color: rgba(255, 215, 0, 0.5);
             --input-bg: #0a192f; --input-border: #ffd700; --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
@@ -58,6 +57,7 @@
             animation: rotateGlowBold 15s linear infinite;
             opacity: 1;
             pointer-events: none;
+            display: none;
         }
 
         @keyframes rotateGlow {
@@ -70,7 +70,6 @@
             100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
         }
 
-        /* --- LANDING CARD --- */
         .landing-card {
             background: linear-gradient(135deg, var(--card-bg), #eef2f7);
             border-radius: 24px;
@@ -94,7 +93,6 @@
                 0 20px 50px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 215, 0, 0.3);
         }
-
         .landing-title {
             font-size: 2.2rem;
             font-weight: 900;
@@ -273,7 +271,7 @@
         .preview-card,
         .treasury-stats,
         .stat-card {
-            /* Existing styles unchanged */
+            /* Keep existing styles */
         }
 
         .dashboard-title {
@@ -296,19 +294,19 @@
     </style>
 </head>
 <body>
-    <!-- ✅ DUAL GLOW SYSTEM -->
+    <!-- GLOW BACKGROUNDS -->
     <div class="glow-bg-light"></div>
-    <div class="glow-bg-dark" style="display: none;"></div>
+    <div class="glow-bg-dark"></div>
 
     <script>
-        // Show/hide glow based on theme
+        // Manage glow visibility
         function updateGlow() {
             const isDark = document.body.classList.contains('dark-mode');
             document.querySelector('.glow-bg-light').style.display = isDark ? 'none' : 'block';
             document.querySelector('.glow-bg-dark').style.display = isDark ? 'block' : 'none';
         }
 
-        // Initialize on load
+        // Initialize theme
         if(localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
         }
@@ -322,10 +320,415 @@
         <div class="landing-brand">Non-custodial • Africa-first • Nonprofit-powered</div>
         <p class="landing-desc">Peer-to-Peer gateway: Send MoMo ↔ Crypto instantly via phone number. Zero custody. Borderless. Built for Africa.</p>
 
-        <!-- Login Form -->
         <div id="login-view">
             <div id="login-form" class="login-form">
                 <input type="text" id="phone" placeholder="Phone Number" value="233555123456">
                 <input type="password" id="pass" placeholder="Password" value="demo123">
                 <button onclick="login()">🔐 Secure Login</button>
-                <span class
+                <span class="link-text" onclick="showResetForm()">Forgot Password?</span>
+                <div id="login-msg" class="msg"></div>
+                <p style="font-size:0.75rem; color:var(--text-sub); margin-top:20px;">Demo: 233555123456 / demo123</p>
+            </div>
+
+            <div id="reset-form" class="reset-form hidden">
+                <h3 style="color:var(--deep-blue); margin-bottom:15px;">Reset Password</h3>
+                <input type="text" id="reset-phone" placeholder="Your Phone Number" value="233555123456">
+                <input type="text" id="reset-code" placeholder="Code (e.g. KS1-1234)" style="text-transform:uppercase;">
+                <input type="password" id="new-password" placeholder="New Password">
+                <button onclick="resetPassword()">✅ Set New Password</button>
+                <button onclick="showLoginForm()" style="background:transparent; color:var(--text-sub); border:2px solid var(--text-sub); box-shadow:none;">Cancel</button>
+                <div id="reset-msg" class="msg"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="dash-view" class="hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h2 id="welcome-msg" class="dashboard-title">Welcome</h2>
+            <button id="theme-toggle" onclick="toggleTheme()" class="btn-small">🌓 Theme</button>
+        </div>
+        
+        <div class="btn-group" id="nav-tabs" style="margin-bottom:20px;"></div>
+
+        <div id="user-dashboard-content" class="hidden">
+            <div class="balance-card">
+                <span class="balance-label">Available Balance</span>
+                <div class="balance-row">
+                    <div class="balance-asset">USDC</div>
+                    <div>1,000.00</div>
+                </div>
+                <div class="balance-row">
+                    <div class="balance-asset">ETH</div>
+                    <div>5.00</div>
+                </div>
+            </div>
+            
+            <label style="display:block; text-align:left; font-size:0.9rem; color:var(--text-sub); margin-bottom:8px; font-weight:700;">Receiver's WhatsApp Number</label>
+            <input type="text" id="recv-phone" placeholder="+233..." value="">
+            <div class="btn-group"><button onclick="findUser()">🔍 Find User</button></div>
+            <div id="find-msg" class="msg"></div>
+            <input type="hidden" id="recv-id">
+            <div style="display:flex; gap:12px; margin-top:20px;">
+                <input type="number" id="amt" placeholder="Amount" style="flex:2;" step="0.01">
+                <select id="asset" style="flex:1;"><option value="usdc">USDC</option><option value="eth">ETH</option></select>
+            </div>
+            <button onclick="send()" style="margin-top:15px;">🚀 Send Funds</button>
+            <div id="send-msg" class="msg"></div>
+        </div>
+
+        <div id="ledger-content" class="hidden">
+            <h3 class="dashboard-title" style="font-size:1.4rem; text-align:left;">📜 My Transactions</h3>
+            <p style="font-size:0.9rem; color:var(--text-sub); text-align:left; margin:10px 0; font-weight:600;">All your P2P activity in one place.</p>
+            <div class="ledger-container" id="ledger-list">
+                <div style="padding:20px; text-align:center; color:var(--text-sub);">Loading transactions...</div>
+            </div>
+        </div>
+
+        <div id="admin-dashboard-content" class="hidden">
+            <div style="text-align:left; margin-bottom:20px;">
+                <h3 class="dashboard-title" style="font-size:1.4rem;">👑 Admin Controls</h3>
+                <p style="font-size:0.9rem; color:var(--text-sub); margin:5px 0; font-weight:600;">Manage users and system security.</p>
+            </div>
+            <button onclick="toggleUsersList()" style="margin-bottom:15px;">👥 Manage Users</button>
+            <div id="user-list-container" class="user-list hidden"></div>
+            <div id="admin-msg" class="msg"></div>
+        </div>
+
+        <div id="admin-treasury-content" class="hidden">
+            <h3 class="dashboard-title" style="font-size:1.4rem; text-align:left;">🏦 Treasury Dashboard</h3>
+            <p style="font-size:0.9rem; color:var(--text-sub); text-align:left; margin:10px 0; font-weight:600;">Real-time platform statistics.</p>
+            <div class="treasury-stats">
+                <div class="stat-card">
+                    <div class="stat-value">0.00</div>
+                    <div class="stat-label">USDC</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">0.00</div>
+                    <div class="stat-label">ETH</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Transactions</div>
+                </div>
+            </div>
+            <button onclick="loadTreasuryStats()" style="margin-top:20px;">🔄 Refresh Stats</button>
+            <div id="treasury-msg" class="msg"></div>
+        </div>
+        
+        <button onclick="logout()" style="margin-top:30px;">Logout</button>
+    </div>
+
+    <script>
+        const API = "https://ks1-backend-v3.onrender.com";
+        let token = localStorage.getItem('k_token');
+        let role = localStorage.getItem('k_role');
+
+        if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+        updateGlow(); // Ensure glow matches initial state
+        if(token) showDash();
+
+        function toggleTheme() { 
+            document.body.classList.toggle('dark-mode'); 
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); 
+            updateGlow();
+        }
+        function showResetForm() { 
+            document.getElementById('login-form').classList.add('hidden'); 
+            document.getElementById('reset-form').classList.remove('hidden'); 
+        }
+        function showLoginForm() { 
+            document.getElementById('reset-form').classList.add('hidden'); 
+            document.getElementById('login-form').classList.remove('hidden'); 
+            document.getElementById('reset-msg').textContent = ''; 
+        }
+
+        async function login() {
+            const p = document.getElementById('phone').value.trim();
+            const pw = document.getElementById('pass').value;
+            const msg = document.getElementById('login-msg');
+            msg.textContent = "Authenticating...";
+            try {
+                const r = await fetch(`${API}/api/v1/auth/login`, { 
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ identifier: p, password: pw }) 
+                });
+                const d = await r.json();
+                if(d.success) {
+                    token = d.result.token; 
+                    role = d.result.user.role;
+                    localStorage.setItem('k_token', token); 
+                    localStorage.setItem('k_role', role);
+                    msg.textContent = "✅ Success!"; 
+                    msg.className = "msg success";
+                    setTimeout(showDash, 1000);
+                } else { 
+                    msg.textContent = "❌ " + d.message; 
+                    msg.className = "msg error"; 
+                }
+            } catch(e) { 
+                msg.textContent = "❌ Connection Failed"; 
+                msg.className = "msg error"; 
+            }
+        }
+
+        async function resetPassword() {
+            const phone = document.getElementById('reset-phone').value.trim();
+            const code = document.getElementById('reset-code').value.trim();
+            const newPass = document.getElementById('new-password').value;
+            const msg = document.getElementById('reset-msg');
+            if(!phone || !code || !newPass) { 
+                msg.textContent = "⚠️ Fill all fields"; 
+                msg.className = "msg error"; 
+                return; 
+            }
+            msg.textContent = "Processing...";
+            try {
+                const r = await fetch(`${API}/api/v1/auth/reset-password`, { 
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ identifier: phone, code, newPassword: newPass }) 
+                });
+                const d = await r.json();
+                if(d.success) { 
+                    msg.textContent = "✅ " + d.message; 
+                    msg.className = "msg success"; 
+                    setTimeout(showLoginForm, 2000); 
+                } else { 
+                    msg.textContent = "❌ " + d.message; 
+                    msg.className = "msg error"; 
+                }
+            } catch(e) { 
+                msg.textContent = "❌ Network Error"; 
+                msg.className = "msg error"; 
+            }
+        }
+
+        function showDash() {
+            document.querySelector('.landing-card').classList.add('hidden');
+            document.getElementById('dash-view').classList.remove('hidden');
+            document.getElementById('theme-toggle').style.display = 'block';
+            
+            if(role === 'admin') {
+                document.getElementById('welcome-msg').textContent = '👑 Admin Dashboard';
+                const navTabs = document.getElementById('nav-tabs');
+                navTabs.innerHTML = `
+                    <button onclick="showAdminTab('users')">👥 Users</button>
+                    <button onclick="showAdminTab('treasury')">🏦 Treasury</button>
+                `;
+                showAdminTab('users');
+            } else {
+                document.getElementById('welcome-msg').textContent = '👤 User Dashboard';
+                const navTabs = document.getElementById('nav-tabs');
+                navTabs.innerHTML = `
+                    <button onclick="showUserTab('transfer')">💸 Transfer</button>
+                    <button onclick="showUserTab('ledger')">📜 Ledger</button>
+                `;
+                showUserTab('transfer');
+            }
+        }
+
+        function toggleUsersList() {
+            const container = document.getElementById('user-list-container');
+            if(container.classList.contains('hidden')) {
+                loadUsers();
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+        function showUserTab(tabName) {
+            document.getElementById('user-dashboard-content').classList.add('hidden');
+            document.getElementById('ledger-content').classList.add('hidden');
+            if(tabName === 'transfer') {
+                document.getElementById('user-dashboard-content').classList.remove('hidden');
+            } else if (tabName === 'ledger') {
+                document.getElementById('ledger-content').classList.remove('hidden');
+                loadLedger();
+            }
+        }
+
+        function showAdminTab(tabName) {
+            document.getElementById('admin-dashboard-content').classList.add('hidden');
+            document.getElementById('admin-treasury-content').classList.add('hidden');
+            if(tabName === 'users') {
+                document.getElementById('admin-dashboard-content').classList.remove('hidden');
+            } else if (tabName === 'treasury') {
+                document.getElementById('admin-treasury-content').classList.remove('hidden');
+                loadTreasuryStats();
+            }
+        }
+
+        async function loadTreasuryStats() {
+            const msg = document.getElementById('treasury-msg');
+            msg.textContent = "Loading...";
+            try {
+                const r = await fetch(`${API}/api/v1/admin/treasury`, { 
+                    headers: {'Authorization': `Bearer ${token}`} 
+                });
+                const d = await r.json();
+                if(d.success) {
+                    let usdc = 0, eth = 0;
+                    d.result.forEach(stat => {
+                        if(stat._id === 'usdc') usdc = stat.total;
+                        if(stat._id === 'eth') eth = stat.total;
+                    });
+                    document.querySelectorAll('.stat-value')[0].textContent = usdc.toFixed(2);
+                    document.querySelectorAll('.stat-value')[1].textContent = eth.toFixed(2);
+                    msg.textContent = "✅ Stats updated";
+                    msg.className = "msg success";
+                } else {
+                    msg.textContent = "❌ " + d.message;
+                    msg.className = "msg error";
+                }
+            } catch(e) {
+                msg.textContent = "❌ Failed to load";
+                msg.className = "msg error";
+            }
+        }
+
+        async function loadLedger() {
+            const container = document.getElementById('ledger-list');
+            container.innerHTML = '<div style="padding:20px; text-align:center;">Loading...</div>';
+            try {
+                const mockTransactions = [
+                    { type: 'sent', amount: 10, asset: 'USDC', to: '233555987654', fee: 0.1, date: '2026-03-01 14:30' },
+                    { type: 'received', amount: 50, asset: 'USDC', from: '233555987654', fee: 0, date: '2026-02-28 09:15' },
+                    { type: 'sent', amount: 2.5, asset: 'ETH', to: '233555987654', fee: 0.025, date: '2026-02-25 16:45' }
+                ];
+                let html = '';
+                mockTransactions.forEach(tx => {
+                    const amountClass = tx.type === 'sent' ? 'ledger-sent' : 'ledger-received';
+                    const amountText = tx.type === 'sent' ? `- ${tx.amount}` : `+ ${tx.amount}`;
+                    const counterpart = tx.type === 'sent' ? `→ ${tx.to}` : `← ${tx.from}`;
+                    html += `
+                        <div class="ledger-item">
+                            <div>
+                                <div class="ledger-amount ${amountClass}">${amountText} ${tx.asset}</div>
+                                <div class="ledger-meta">${counterpart} • Fee: ${tx.fee} ${tx.asset}</div>
+                            </div>
+                            <div class="ledger-date">${tx.date}</div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html || '<div style="padding:20px; text-align:center; color:var(--text-sub);">No transactions yet.</div>';
+            } catch(e) {
+                container.innerHTML = '<div style="padding:20px; text-align:center; color:red;">Failed to load.</div>';
+            }
+        }
+
+        async function loadUsers() {
+            const container = document.getElementById('user-list-container');
+            container.innerHTML = '<div style="padding:20px; text-align:center;">Loading...</div>';
+            const demoUsers = [
+                { phone_number: "233555123456", role: "user", createdAt: "2026-01-01" },
+                { phone_number: "233555987654", role: "admin", createdAt: "2026-01-01" }
+            ];
+            let html = demoUsers.map(u => `
+                <div class="user-item">
+                    <div class="user-info">
+                        <strong>${u.phone_number}</strong>
+                        <span>${u.role.toUpperCase()} • ${new Date(u.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <button class="btn-small" onclick="generateCode('${u.phone_number}')">🔑 Reset Code</button>
+                </div>
+            `).join('');
+            container.innerHTML = html;
+        }
+
+        async function generateCode(phone) {
+            const msg = document.getElementById('admin-msg');
+            const codeNum = Math.floor(1000 + Math.random() * 9000);
+            const resetCode = `KS1-${codeNum}`;
+            msg.innerHTML = `✅ <strong>Code for ${phone}:</strong><br><span style="font-size:1.2rem; font-weight:800; color:var(--gold); background:var(--deep-blue); padding:6px 12px; border-radius:5px; display:inline-block; margin:8px 0; border:2px solid var(--gold);">${resetCode}</span><div style="font-size:0.85rem; margin-top:5px; color:var(--text-sub);">Send this to the user</div>`;
+            msg.className = "msg success";
+        }
+
+        async function findUser() {
+            const p = document.getElementById('recv-phone').value;
+            const msg = document.getElementById('find-msg');
+            if(!p) return;
+            msg.textContent = "🔍 Searching...";
+            try {
+                const r = await fetch(`${API}/api/v1/users/search?phone=${encodeURIComponent(p)}`, { 
+                    headers: {'Authorization': `Bearer ${token}`} 
+                });
+                const d = await r.json();
+                if(d.success) {
+                    document.getElementById('recv-id').value = d.result.userId;
+                    msg.innerHTML = `✅ <strong>Verified:</strong> ${d.result.phone}`; 
+                    msg.className = "msg success";
+                } else { 
+                    msg.textContent = "❌ " + d.message; 
+                    msg.className = "msg error"; 
+                }
+            } catch(e) { 
+                msg.textContent = "❌ Network Error"; 
+                msg.className = "msg error"; 
+            }
+        }
+
+        async function send() {
+            const id = document.getElementById('recv-id').value;
+            const amt = parseFloat(document.getElementById('amt').value);
+            const asset = document.getElementById('asset').value;
+            const receiverPhoneRaw = document.getElementById('recv-phone').value;
+            const msgDiv = document.getElementById('send-msg');
+            
+            if(!id || !amt) { 
+                msgDiv.textContent = "⚠️ Find user & enter amount."; 
+                msgDiv.className = "msg error"; 
+                return; 
+            }
+            msgDiv.innerHTML = "⏳ Processing...";
+            msgDiv.className = "msg";
+            try {
+                const r = await fetch(`${API}/api/v1/p2p/transfer`, {
+                    method: 'POST',
+                    headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`},
+                    body: JSON.stringify({ receiverId: id, asset, amount: amt }) 
+                });
+                const d = await r.json();
+                if(d.success) {
+                    const fee = d.result.treasury_fee;
+                    const cleanPhone = receiverPhoneRaw.replace(/[\+\-\s]/g, '');
+                    const txRef = "KS1-" + Math.floor(100000 + Math.random() * 900000);
+                    const messageText = `🔔 *KS1 P2P Gateway*\n\nReceived: ${amt} ${asset.toUpperCase()}\nFrom: ${document.getElementById('phone').value.trim()}\nRef: ${txRef}\nFee: ${fee}\nStatus: ✅ Confirmed\n\nPowered by KS1 P2P Gateway`;
+                    const waLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(messageText)}`;
+                    msgDiv.className = "msg success";
+                    msgDiv.innerHTML = `
+                        <div style="margin-bottom:15px; font-weight:700;">✅ <strong>Success!</strong><br>Fee: ${fee} ${asset.toUpperCase()}</div>
+                        <div class="preview-card">
+                            <div class="preview-header">📱 Receipt</div>
+                            <div class="preview-body">${messageText.replace(/\n/g, '<br>')}</div>
+                            <div class="btn-group">
+                                <button onclick="copyToClipboard(\`${messageText.replace(/`/g, '\\`')}\`)" style="margin:0;">📋 Copy</button>
+                                <button onclick="window.open('${waLink}', '_blank')" style="margin:0; background:linear-gradient(to bottom, var(--gold), var(--gold-dark)); color:#000; box-shadow: 0 4px 0 var(--gold-shadow), 0 5px 12px rgba(0,0,0,0.2);">
+                                    💬 WhatsApp
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('amt').value = '';
+                } else { 
+                    msgDiv.textContent = "❌ " + d.message; 
+                    msgDiv.className = "msg error"; 
+                }
+            } catch(e) { 
+                msgDiv.textContent = "❌ Network Error"; 
+                msgDiv.className = "msg error"; 
+            }
+        }
+
+        function copyToClipboard(text) { 
+            navigator.clipboard.writeText(text).then(() => alert("✅ Copied!")).catch(() => alert("Copy failed.")); 
+        }
+        function logout() { 
+            localStorage.clear(); 
+            location.reload(); 
+        }
+    </script>
+</body>
+</html>
