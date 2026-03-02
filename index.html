@@ -29,16 +29,14 @@
             color: #000; 
             font-weight: 800; 
             border: none; 
-            border-radius: 10px; /* More rounded */
-            padding: 16px; /* Increased padding for flexibility */
-            margin: 12px 0; /* Slightly more spacing */
+            border-radius: 10px;
+            padding: 16px;
+            margin: 12px 0;
             cursor: pointer; 
             text-transform: uppercase; 
-            letter-spacing: 1px; /* Enhanced */
-            box-shadow: 
-                0 6px 0 var(--gold-shadow), /* Deeper 3D shadow */
-                0 8px 20px rgba(0,0,0,0.25); /* Softer glow */
-            transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1); /* Smoother flex */
+            letter-spacing: 1px;
+            box-shadow: 0 6px 0 var(--gold-shadow), 0 8px 20px rgba(0,0,0,0.25);
+            transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             top: 0;
             display: inline-flex;
@@ -46,43 +44,17 @@
             justify-content: center;
             gap: 10px;
             text-decoration: none;
-            font-size: 1.05rem; /* Slightly larger */
+            font-size: 1.05rem;
         }
-
-        button:hover { 
-            filter: brightness(1.08);
-            transform: translateY(-3px) scale(1.02); /* More lift & flex */
-            box-shadow: 
-                0 8px 0 var(--gold-shadow), 
-                0 12px 25px rgba(0,0,0,0.3);
-        }
-
-        button:active { 
-            top: 6px; /* Deeper press */
-            box-shadow: 
-                0 0 0 var(--gold-shadow), 
-                inset 0 4px 10px rgba(0,0,0,0.25);
-            transform: scale(0.98);
-        }
-
-        /* Small buttons (like Reset Code) */
-        .btn-small { 
-            width: auto; 
-            padding: 10px 18px; 
-            font-size: 0.9rem; 
-            margin: 6px;
-            border-radius: 8px;
-        }
-
+        button:hover { filter: brightness(1.08); transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 0 var(--gold-shadow), 0 12px 25px rgba(0,0,0,0.3); }
+        button:active { top: 6px; box-shadow: 0 0 0 var(--gold-shadow), inset 0 4px 10px rgba(0,0,0,0.25); transform: scale(0.98); }
+        .btn-small { width: auto; padding: 10px 18px; font-size: 0.9rem; margin: 6px; border-radius: 8px; }
         .btn-group { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; justify-content: center; }
         .btn-group button { margin: 6px; flex: 1; min-width: 130px; }
-        
         .hidden { display: none; }
-        
         .msg { margin-top: 18px; font-size: 0.95rem; font-weight: 600; color: var(--deep-blue); }
         body.dark-mode .msg { color: var(--gold); }
-        .success { color: var(--deep-blue); } 
-        body.dark-mode .success { color: var(--gold); }
+        .success { color: var(--deep-blue); } body.dark-mode .success { color: var(--gold); }
         .error { color: #d32f2f; }
         .link-text { color: var(--royal-blue); text-decoration: underline; cursor: pointer; margin-top: 12px; display: block; }
         body.dark-mode .link-text { color: var(--gold); }
@@ -97,101 +69,61 @@
             box-shadow: inset 0 0 20px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.05);
             border: 1px solid rgba(255, 215, 0, 0.1);
         }
-        body.dark-mode .balance-card { 
-            background: linear-gradient(135deg, rgba(10,25,47,0.8), rgba(17,34,64,0.8));
-            border: 1px solid rgba(255, 215, 0, 0.2);
-        }
+        body.dark-mode .balance-card { background: linear-gradient(135deg, rgba(10,25,47,0.8), rgba(17,34,64,0.8)); border: 1px solid rgba(255, 215, 0, 0.2); }
         .balance-label { font-size: 0.85rem; color: var(--text-sub); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 12px; }
         .balance-amount { font-size: 1.65rem; color: var(--deep-blue); font-weight: 900; }
         body.dark-mode .balance-amount { color: var(--gold); text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
         .balance-sub { font-size: 1.35rem; color: var(--text-sub); font-weight: 600; display: block; margin-top: 6px; }
         body.dark-mode .balance-sub { color: #8892b0; }
 
-        .user-list { 
-            text-align: left; 
-            max-height: 300px; 
-            overflow-y: auto; 
-            border: 1px solid var(--input-border); 
-            border-radius: 10px; 
-            margin-top: 18px; 
+        /* --- TRANSACTION LEDGER STYLES --- */
+        .ledger-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            margin-top: 15px;
             background: var(--input-bg);
         }
-        .user-item { 
-            padding: 14px; 
-            border-bottom: 1px solid var(--input-border); 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            font-size: 0.92rem;
+        .ledger-item {
+            padding: 14px;
+            border-bottom: 1px solid var(--input-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.88rem;
         }
+        .ledger-item:last-child { border-bottom: none; }
+        .ledger-amount { font-weight: 700; }
+        .ledger-sent { color: #d32f2f; }
+        .ledger-received { color: #2e7d32; }
+        .ledger-meta { color: var(--text-sub); font-size: 0.8rem; margin-top: 4px; }
+        .ledger-date { font-size: 0.75rem; color: var(--text-sub); opacity: 0.8; }
+
+        .user-list { text-align: left; max-height: 300px; overflow-y: auto; border: 1px solid var(--input-border); border-radius: 10px; margin-top: 18px; background: var(--input-bg); }
+        .user-item { padding: 14px; border-bottom: 1px solid var(--input-border); display: flex; justify-content: space-between; align-items: center; font-size: 0.92rem; }
         .user-item:last-child { border-bottom: none; }
         .user-info strong { display: block; color: var(--text-main); }
         .user-info span { font-size: 0.82rem; color: var(--text-sub); }
         
-        .preview-card { 
-            margin-top: 22px; 
-            background: var(--input-bg); 
-            border: 2px solid var(--deep-blue); 
-            border-radius: 14px; 
-            padding: 22px; 
-            text-align: left; 
-            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-        }
-        body.dark-mode .preview-card { 
-            border-color: var(--gold); 
-            background: rgba(10, 25, 47, 0.5);
-        }
-        .preview-header { 
-            color: var(--deep-blue); 
-            font-size: 0.92rem; 
-            font-weight: 800; 
-            margin-bottom: 16px; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            border-bottom: 2px solid var(--input-border); 
-            padding-bottom: 10px; 
-            text-transform: uppercase;
-        }
-        body.dark-mode .preview-header { 
-            color: var(--gold); 
-            border-bottom-color: rgba(255,215,0,0.3);
-        }
-        .preview-body { 
-            background: var(--card-bg); 
-            padding: 16px; 
-            border-radius: 10px; 
-            font-family: monospace; 
-            font-size: 0.87rem; 
-            color: var(--text-main); 
-            white-space: pre-wrap; 
-            border-left: 4px solid var(--deep-blue); 
-            margin-bottom: 20px; 
-            border: 1px solid var(--input-border);
-        }
-        body.dark-mode .preview-body { 
-            background: rgba(0,0,0,0.2); 
-            border-left-color: var(--gold);
-        }
+        .preview-card { margin-top: 22px; background: var(--input-bg); border: 2px solid var(--deep-blue); border-radius: 14px; padding: 22px; text-align: left; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+        body.dark-mode .preview-card { border-color: var(--gold); background: rgba(10, 25, 47, 0.5); }
+        .preview-header { color: var(--deep-blue); font-size: 0.92rem; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid var(--input-border); padding-bottom: 10px; text-transform: uppercase; }
+        body.dark-mode .preview-header { color: var(--gold); border-bottom-color: rgba(255,215,0,0.3); }
+        .preview-body { background: var(--card-bg); padding: 16px; border-radius: 10px; font-family: monospace; font-size: 0.87rem; color: var(--text-main); white-space: pre-wrap; border-left: 4px solid var(--deep-blue); margin-bottom: 20px; border: 1px solid var(--input-border); }
+        body.dark-mode .preview-body { background: rgba(0,0,0,0.2); border-left-color: var(--gold); }
 
         /* --- 3D GOLD DASHBOARD TITLES --- */
         .dashboard-title {
             color: var(--gold);
             font-size: 1.6rem;
             font-weight: 800;
-            text-shadow: 
-                1px 1px 0 rgba(0,0,0,0.2),
-                2px 2px 0 rgba(0,0,0,0.1),
-                0 0 15px rgba(255, 215, 0, 0.4);
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.2), 2px 2px 0 rgba(0,0,0,0.1), 0 0 15px rgba(255, 215, 0, 0.4);
             margin: 0;
             letter-spacing: 0.5px;
             text-align: left;
         }
-        body.dark-mode .dashboard-title {
-            text-shadow: 
-                1px 1px 0 rgba(0,0,0,0.3),
-                0 0 20px rgba(255, 215, 0, 0.6);
-        }
+        body.dark-mode .dashboard-title { text-shadow: 1px 1px 0 rgba(0,0,0,0.3), 0 0 20px rgba(255, 215, 0, 0.6); }
     </style>
 </head>
 <body>
@@ -222,11 +154,11 @@
 
         <div id="dash-view" class="hidden">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <!-- ✅ 3D GOLD TITLE -->
                 <h2 id="welcome-msg" class="dashboard-title">Welcome</h2>
                 <button id="theme-toggle" onclick="toggleTheme()" class="btn-small">🌓 Theme</button>
             </div>
             
+            <!-- NAV TABS FOR USER -->
             <div class="btn-group" id="nav-tabs" style="margin-bottom:20px;"></div>
 
             <div id="user-dashboard-content" class="hidden">
@@ -248,6 +180,15 @@
                 <div id="send-msg" class="msg"></div>
             </div>
 
+            <!-- TRANSACTION LEDGER TAB -->
+            <div id="ledger-content" class="hidden">
+                <h3 class="dashboard-title" style="font-size:1.4rem; text-align:left;">📜 My Transactions</h3>
+                <p style="font-size:0.88rem; color:var(--text-sub); text-align:left; margin:10px 0;">All your P2P activity in one place.</p>
+                <div class="ledger-container" id="ledger-list">
+                    <div style="padding:20px; text-align:center; color:var(--text-sub);">Loading transactions...</div>
+                </div>
+            </div>
+
             <div id="admin-dashboard-content" class="hidden">
                 <div style="text-align:left; margin-bottom:20px;">
                     <h3 class="dashboard-title" style="font-size:1.4rem;">👑 Admin Controls</h3>
@@ -258,7 +199,6 @@
                 <div id="admin-msg" class="msg"></div>
             </div>
             
-            <!-- ✅ LOGOUT BUTTON NOW GOLD 3D -->
             <button onclick="logout()" style="margin-top:30px;">Logout</button>
         </div>
     </div>
@@ -358,9 +298,60 @@
                 loadUsers();
             } else {
                 document.getElementById('welcome-msg').textContent = '👤 User Dashboard';
+                // Show Nav Tabs for User
+                const navTabs = document.getElementById('nav-tabs');
+                navTabs.innerHTML = `
+                    <button onclick="showTab('transfer')">💸 Transfer</button>
+                    <button onclick="showTab('ledger')">📜 Ledger</button>
+                `;
+                showTab('transfer');
+            }
+        }
+
+        function showTab(tabName) {
+            document.getElementById('user-dashboard-content').classList.add('hidden');
+            document.getElementById('ledger-content').classList.add('hidden');
+            if(tabName === 'transfer') {
                 document.getElementById('user-dashboard-content').classList.remove('hidden');
-                document.getElementById('bal-usdc').textContent = "1,000.00";
-                document.getElementById('bal-eth').textContent = "5.00";
+            } else if (tabName === 'ledger') {
+                document.getElementById('ledger-content').classList.remove('hidden');
+                loadLedger();
+            }
+        }
+
+        // ✅ NEW: LOAD TRANSACTION LEDGER
+        async function loadLedger() {
+            const container = document.getElementById('ledger-list');
+            container.innerHTML = '<div style="padding:20px; text-align:center;">Loading...</div>';
+            
+            try {
+                // For demo, we'll simulate transactions
+                const mockTransactions = [
+                    { type: 'sent', amount: 10, asset: 'USDC', to: '233555987654', fee: 0.1, date: '2026-03-01 14:30' },
+                    { type: 'received', amount: 50, asset: 'USDC', from: '233555987654', fee: 0, date: '2026-02-28 09:15' },
+                    { type: 'sent', amount: 2.5, asset: 'ETH', to: '233555987654', fee: 0.025, date: '2026-02-25 16:45' }
+                ];
+                
+                let html = '';
+                mockTransactions.forEach(tx => {
+                    const amountClass = tx.type === 'sent' ? 'ledger-sent' : 'ledger-received';
+                    const amountText = tx.type === 'sent' ? `- ${tx.amount}` : `+ ${tx.amount}`;
+                    const counterpart = tx.type === 'sent' ? `→ ${tx.to}` : `← ${tx.from}`;
+                    
+                    html += `
+                        <div class="ledger-item">
+                            <div>
+                                <div class="ledger-amount ${amountClass}">${amountText} ${tx.asset}</div>
+                                <div class="ledger-meta">${counterpart} • Fee: ${tx.fee} ${tx.asset}</div>
+                            </div>
+                            <div class="ledger-date">${tx.date}</div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html || '<div style="padding:20px; text-align:center; color:var(--text-sub);">No transactions yet.</div>';
+            } catch(e) {
+                container.innerHTML = '<div style="padding:20px; text-align:center; color:red;">Failed to load.</div>';
             }
         }
 
@@ -449,12 +440,15 @@
                             <div class="preview-body">${messageText.replace(/\n/g, '<br>')}</div>
                             <div class="btn-group">
                                 <button onclick="copyToClipboard(\`${messageText.replace(/`/g, '\\`')}\`)" style="margin:0;">📋 Copy</button>
-                                <!-- ✅ WHATSAPP BUTTON NOW GOLD 3D -->
                                 <a href="${waLink}" target="_blank" style="margin:0; text-decoration:none; width:100%;">💬 WhatsApp</a>
                             </div>
                         </div>
                     `;
                     document.getElementById('amt').value = '';
+                    // Refresh ledger after send
+                    if(document.getElementById('ledger-content').classList.contains('hidden') === false) {
+                        loadLedger();
+                    }
                 } else { 
                     msgDiv.textContent = "❌ " + d.message; 
                     msgDiv.className = "msg error"; 
