@@ -59,22 +59,64 @@
         .link-text { color: var(--royal-blue); text-decoration: underline; cursor: pointer; margin-top: 12px; display: block; }
         body.dark-mode .link-text { color: var(--gold); }
 
+        /* --- METAMASK-STYLE BALANCE CARD --- */
         .balance-card { 
             text-align: left; 
-            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); 
-            padding: 28px; 
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef); 
+            padding: 25px; 
             border-radius: 16px; 
-            margin-bottom: 28px; 
-            border-left: 6px solid var(--gold); 
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.05);
-            border: 1px solid rgba(255, 215, 0, 0.1);
+            margin-bottom: 25px; 
+            border: 1px solid #dee2e6;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
-        body.dark-mode .balance-card { background: linear-gradient(135deg, rgba(10,25,47,0.8), rgba(17,34,64,0.8)); border: 1px solid rgba(255, 215, 0, 0.2); }
-        .balance-label { font-size: 0.85rem; color: var(--text-sub); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 12px; }
-        .balance-amount { font-size: 1.65rem; color: var(--deep-blue); font-weight: 900; }
-        body.dark-mode .balance-amount { color: var(--gold); text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
-        .balance-sub { font-size: 1.35rem; color: var(--text-sub); font-weight: 600; display: block; margin-top: 6px; }
-        body.dark-mode .balance-sub { color: #8892b0; }
+        body.dark-mode .balance-card { 
+            background: linear-gradient(135deg, #1a2233, #0f172a);
+            border: 1px solid #334155;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .balance-label { 
+            font-size: 0.85rem; 
+            color: var(--text-sub); 
+            text-transform: uppercase; 
+            font-weight: 700; 
+            display: block; 
+            margin-bottom: 15px; 
+            letter-spacing: 1px;
+        }
+        .balance-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        body.dark-mode .balance-row { border-bottom-color: rgba(255,255,255,0.1); }
+        .balance-row:last-child { border-bottom: none; }
+        .coin-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 12px;
+        }
+        .usdc-icon { background: #2775ca; color: white; } /* USDC Blue */
+        .eth-icon { background: #627eea; color: white; } /* ETH Purple */
+        .balance-asset { 
+            display: flex; 
+            align-items: center; 
+            font-weight: 600; 
+            font-size: 1.1rem;
+        }
+        .balance-amount { 
+            font-weight: 800; 
+            font-size: 1.2rem; 
+            color: var(--deep-blue);
+        }
+        body.dark-mode .balance-amount { color: #e2e8f0; }
 
         /* --- TRANSACTION LEDGER STYLES --- */
         .ledger-container {
@@ -106,12 +148,51 @@
         .user-info strong { display: block; color: var(--text-main); }
         .user-info span { font-size: 0.82rem; color: var(--text-sub); }
         
-        .preview-card { margin-top: 22px; background: var(--input-bg); border: 2px solid var(--deep-blue); border-radius: 14px; padding: 22px; text-align: left; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
-        body.dark-mode .preview-card { border-color: var(--gold); background: rgba(10, 25, 47, 0.5); }
-        .preview-header { color: var(--deep-blue); font-size: 0.92rem; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid var(--input-border); padding-bottom: 10px; text-transform: uppercase; }
-        body.dark-mode .preview-header { color: var(--gold); border-bottom-color: rgba(255,215,0,0.3); }
-        .preview-body { background: var(--card-bg); padding: 16px; border-radius: 10px; font-family: monospace; font-size: 0.87rem; color: var(--text-main); white-space: pre-wrap; border-left: 4px solid var(--deep-blue); margin-bottom: 20px; border: 1px solid var(--input-border); }
-        body.dark-mode .preview-body { background: rgba(0,0,0,0.2); border-left-color: var(--gold); }
+        .preview-card { 
+            margin-top: 22px; 
+            background: var(--input-bg); 
+            border: 2px solid var(--deep-blue); 
+            border-radius: 14px; 
+            padding: 22px; 
+            text-align: left; 
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        }
+        body.dark-mode .preview-card { 
+            border-color: var(--gold); 
+            background: rgba(10, 25, 47, 0.5);
+        }
+        .preview-header { 
+            color: var(--deep-blue); 
+            font-size: 0.92rem; 
+            font-weight: 800; 
+            margin-bottom: 16px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            border-bottom: 2px solid var(--input-border); 
+            padding-bottom: 10px; 
+            text-transform: uppercase;
+        }
+        body.dark-mode .preview-header { 
+            color: var(--gold); 
+            border-bottom-color: rgba(255,215,0,0.3);
+        }
+        .preview-body { 
+            background: var(--card-bg); 
+            padding: 16px; 
+            border-radius: 10px; 
+            font-family: monospace; 
+            font-size: 0.87rem; 
+            color: var(--text-main); 
+            white-space: pre-wrap; 
+            border-left: 4px solid var(--deep-blue); 
+            margin-bottom: 20px; 
+            border: 1px solid var(--input-border);
+        }
+        body.dark-mode .preview-body { 
+            background: rgba(0,0,0,0.2); 
+            border-left-color: var(--gold);
+        }
 
         /* --- 3D GOLD DASHBOARD TITLES --- */
         .dashboard-title {
@@ -124,6 +205,32 @@
             text-align: left;
         }
         body.dark-mode .dashboard-title { text-shadow: 1px 1px 0 rgba(0,0,0,0.3), 0 0 20px rgba(255, 215, 0, 0.6); }
+
+        /* --- ADMIN TREASURY DASHBOARD --- */
+        .treasury-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .stat-card {
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--gold);
+            margin: 5px 0;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
@@ -158,15 +265,27 @@
                 <button id="theme-toggle" onclick="toggleTheme()" class="btn-small">🌓 Theme</button>
             </div>
             
-            <!-- NAV TABS FOR USER -->
-            <div class="btn-group" id="nav-tabs" style="margin-bottom:20px;"></div>
-
+            <!-- NO NAV TABS FOR USER - DIRECT CONTENT -->
             <div id="user-dashboard-content" class="hidden">
+                <!-- METAMASK-STYLE BALANCE -->
                 <div class="balance-card">
                     <span class="balance-label">Available Balance</span>
-                    <div class="balance-amount">💰 <span id="bal-usdc" style="color:var(--gold-dark);">1,000.00</span> USDC</div>
-                    <span class="balance-sub">💎 <span id="bal-eth">5.00</span> ETH</span>
+                    <div class="balance-row">
+                        <div class="balance-asset">
+                            <div class="coin-icon usdc-icon">U</div>
+                            USDC
+                        </div>
+                        <div class="balance-amount">1,000.00</div>
+                    </div>
+                    <div class="balance-row">
+                        <div class="balance-asset">
+                            <div class="coin-icon eth-icon">Ξ</div>
+                            ETH
+                        </div>
+                        <div class="balance-amount">5.00</div>
+                    </div>
                 </div>
+                
                 <label style="display:block; text-align:left; font-size:0.85rem; color:var(--text-sub); margin-bottom:8px; font-weight:700;">Receiver's WhatsApp Number</label>
                 <input type="text" id="recv-phone" placeholder="+233..." value="">
                 <div class="btn-group"><button onclick="findUser()">🔍 Find User</button></div>
@@ -189,6 +308,7 @@
                 </div>
             </div>
 
+            <!-- ADMIN DASHBOARDS -->
             <div id="admin-dashboard-content" class="hidden">
                 <div style="text-align:left; margin-bottom:20px;">
                     <h3 class="dashboard-title" style="font-size:1.4rem;">👑 Admin Controls</h3>
@@ -197,6 +317,27 @@
                 <button onclick="loadUsers()" style="margin-bottom:15px;">👥 Manage Users</button>
                 <div id="user-list-container" class="user-list"></div>
                 <div id="admin-msg" class="msg"></div>
+            </div>
+
+            <div id="admin-treasury-content" class="hidden">
+                <h3 class="dashboard-title" style="font-size:1.4rem; text-align:left;">🏦 Treasury Dashboard</h3>
+                <p style="font-size:0.88rem; color:var(--text-sub); text-align:left; margin:10px 0;">Real-time platform statistics.</p>
+                <div class="treasury-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">0.00</div>
+                        <div class="stat-label">USDC</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">0.00</div>
+                        <div class="stat-label">ETH</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Transactions</div>
+                    </div>
+                </div>
+                <button onclick="loadTreasuryStats()" style="margin-top:20px;">🔄 Refresh Stats</button>
+                <div id="treasury-msg" class="msg"></div>
             </div>
             
             <button onclick="logout()" style="margin-top:30px;">Logout</button>
@@ -294,50 +435,77 @@
             
             if(role === 'admin') {
                 document.getElementById('welcome-msg').textContent = '👑 Admin Dashboard';
-                document.getElementById('admin-dashboard-content').classList.remove('hidden');
-                loadUsers();
-            } else {
-                document.getElementById('welcome-msg').textContent = '👤 User Dashboard';
-                // Show Nav Tabs for User
+                // Show Admin Nav Tabs
                 const navTabs = document.getElementById('nav-tabs');
                 navTabs.innerHTML = `
-                    <button onclick="showTab('transfer')">💸 Transfer</button>
-                    <button onclick="showTab('ledger')">📜 Ledger</button>
+                    <button onclick="showAdminTab('users')">👥 Users</button>
+                    <button onclick="showAdminTab('treasury')">🏦 Treasury</button>
                 `;
-                showTab('transfer');
-            }
-        }
-
-        function showTab(tabName) {
-            document.getElementById('user-dashboard-content').classList.add('hidden');
-            document.getElementById('ledger-content').classList.add('hidden');
-            if(tabName === 'transfer') {
+                showAdminTab('users');
+            } else {
+                document.getElementById('welcome-msg').textContent = '👤 User Dashboard';
+                // NO NAV TABS - SHOW TRANSFER FORM DIRECTLY
                 document.getElementById('user-dashboard-content').classList.remove('hidden');
-            } else if (tabName === 'ledger') {
-                document.getElementById('ledger-content').classList.remove('hidden');
-                loadLedger();
             }
         }
 
-        // ✅ NEW: LOAD TRANSACTION LEDGER
+        function showAdminTab(tabName) {
+            document.getElementById('admin-dashboard-content').classList.add('hidden');
+            document.getElementById('admin-treasury-content').classList.add('hidden');
+            if(tabName === 'users') {
+                document.getElementById('admin-dashboard-content').classList.remove('hidden');
+                loadUsers();
+            } else if (tabName === 'treasury') {
+                document.getElementById('admin-treasury-content').classList.remove('hidden');
+                loadTreasuryStats();
+            }
+        }
+
+        // ✅ NEW: ADMIN TREASURY STATS
+        async function loadTreasuryStats() {
+            const msg = document.getElementById('treasury-msg');
+            msg.textContent = "Loading...";
+            try {
+                const r = await fetch(`${API}/api/v1/admin/treasury`, { 
+                    headers: {'Authorization': `Bearer ${token}`} 
+                });
+                const d = await r.json();
+                if(d.success) {
+                    let usdc = 0, eth = 0;
+                    d.result.forEach(stat => {
+                        if(stat._id === 'usdc') usdc = stat.total;
+                        if(stat._id === 'eth') eth = stat.total;
+                    });
+                    document.querySelectorAll('.stat-value')[0].textContent = usdc.toFixed(2);
+                    document.querySelectorAll('.stat-value')[1].textContent = eth.toFixed(2);
+                    // Transaction count would come from another endpoint in real app
+                    msg.textContent = "✅ Stats updated";
+                    msg.className = "msg success";
+                } else {
+                    msg.textContent = "❌ " + d.message;
+                    msg.className = "msg error";
+                }
+            } catch(e) {
+                msg.textContent = "❌ Failed to load";
+                msg.className = "msg error";
+            }
+        }
+
+        // ✅ LOAD LEDGER (UNCHANGED)
         async function loadLedger() {
             const container = document.getElementById('ledger-list');
             container.innerHTML = '<div style="padding:20px; text-align:center;">Loading...</div>';
-            
             try {
-                // For demo, we'll simulate transactions
                 const mockTransactions = [
                     { type: 'sent', amount: 10, asset: 'USDC', to: '233555987654', fee: 0.1, date: '2026-03-01 14:30' },
                     { type: 'received', amount: 50, asset: 'USDC', from: '233555987654', fee: 0, date: '2026-02-28 09:15' },
                     { type: 'sent', amount: 2.5, asset: 'ETH', to: '233555987654', fee: 0.025, date: '2026-02-25 16:45' }
                 ];
-                
                 let html = '';
                 mockTransactions.forEach(tx => {
                     const amountClass = tx.type === 'sent' ? 'ledger-sent' : 'ledger-received';
                     const amountText = tx.type === 'sent' ? `- ${tx.amount}` : `+ ${tx.amount}`;
                     const counterpart = tx.type === 'sent' ? `→ ${tx.to}` : `← ${tx.from}`;
-                    
                     html += `
                         <div class="ledger-item">
                             <div>
@@ -348,7 +516,6 @@
                         </div>
                     `;
                 });
-                
                 container.innerHTML = html || '<div style="padding:20px; text-align:center; color:var(--text-sub);">No transactions yet.</div>';
             } catch(e) {
                 container.innerHTML = '<div style="padding:20px; text-align:center; color:red;">Failed to load.</div>';
@@ -430,7 +597,8 @@
                     const fee = d.result.treasury_fee;
                     const cleanPhone = receiverPhoneRaw.replace(/[\+\-\s]/g, '');
                     const txRef = "KS1-" + Math.floor(100000 + Math.random() * 900000);
-                    const messageText = `🔔 *KS1 P2P Gateway*\n\nReceived: ${amt} ${asset.toUpperCase()}\nFrom: ${document.getElementById('phone').value.trim()}\nRef: ${txRef}\nFee: ${fee}\nStatus: ✅ Confirmed\n\nPowered by KS1 Empower Pay`;
+                    // ✅ UPDATED FOOTER TO KS1 P2P GATEWAY
+                    const messageText = `🔔 *KS1 P2P Gateway*\n\nReceived: ${amt} ${asset.toUpperCase()}\nFrom: ${document.getElementById('phone').value.trim()}\nRef: ${txRef}\nFee: ${fee}\nStatus: ✅ Confirmed\n\nKS1 P2P Gateway`;
                     const waLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(messageText)}`;
                     msgDiv.className = "msg success";
                     msgDiv.innerHTML = `
@@ -440,15 +608,14 @@
                             <div class="preview-body">${messageText.replace(/\n/g, '<br>')}</div>
                             <div class="btn-group">
                                 <button onclick="copyToClipboard(\`${messageText.replace(/`/g, '\\`')}\`)" style="margin:0;">📋 Copy</button>
-                                <a href="${waLink}" target="_blank" style="margin:0; text-decoration:none; width:100%;">💬 WhatsApp</a>
+                                <!-- ✅ WHATSAPP BUTTON NOW FULL GOLD 3D -->
+                                <button onclick="window.open('${waLink}', '_blank')" style="margin:0; background:linear-gradient(to bottom, #25D366, #1ebc57); box-shadow: 0 6px 0 #1ebc57, 0 8px 20px rgba(37,211,102,0.3);">
+                                    💬 WhatsApp
+                                </button>
                             </div>
                         </div>
                     `;
                     document.getElementById('amt').value = '';
-                    // Refresh ledger after send
-                    if(document.getElementById('ledger-content').classList.contains('hidden') === false) {
-                        loadLedger();
-                    }
                 } else { 
                     msgDiv.textContent = "❌ " + d.message; 
                     msgDiv.className = "msg error"; 
