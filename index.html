@@ -17,145 +17,239 @@
             --glow-color: rgba(255, 215, 0, 0.15); --border-color: rgba(255, 215, 0, 0.5);
             --input-bg: #0a192f; --input-border: #ffd700; --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
-        body { background: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; position: relative; transition: background 0.4s ease; }
-        .glow-bg { position: fixed; top: 50%; left: 50%; width: 150vw; height: 150vw; background: radial-gradient(circle, var(--glow-color) 0%, transparent 60%); transform: translate(-50%, -50%); z-index: -1; animation: rotateGlow 12s linear infinite; opacity: 0.8; }
-        @keyframes rotateGlow { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-        .box { background: var(--card-bg); padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border-color); width: 90%; max-width: 500px; text-align: center; box-shadow: var(--shadow-soft); position: relative; overflow: hidden; backdrop-filter: blur(10px); }
+        body { 
+            background: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: 'Segoe UI', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            position: relative; 
+            transition: background 0.4s ease;
+            /* ✅ BOLD TEXT FOR READABILITY */
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .glow-bg { 
+            position: fixed; 
+            top: 50%; left: 50%; 
+            width: 150vw; height: 150vw; 
+            background: radial-gradient(circle, var(--glow-color) 0%, transparent 60%); 
+            transform: translate(-50%, -50%); 
+            z-index: -1; 
+            animation: rotateGlow 12s linear infinite; 
+            opacity: 0.8; 
+        }
+        @keyframes rotateGlow { 
+            0% { transform: translate(-50%, -50%) rotate(0deg); } 
+            100% { transform: translate(-50%, -50%) rotate(360deg); } 
+        }
+        .box { 
+            background: var(--card-bg); 
+            padding: 2.5rem; 
+            border-radius: 20px; 
+            border: 1px solid var(--border-color); 
+            width: 90%; 
+            max-width: 500px; 
+            text-align: center; 
+            box-shadow: var(--shadow-soft); 
+            position: relative; 
+            overflow: hidden; 
+            backdrop-filter: blur(10px); 
+        }
 
-        /* --- ENHANCED 3D GOLD BUTTONS --- */
+        /* --- GOLD BUTTONS (REDUCED FLEXIBILITY) --- */
         button { 
             width: 100%;
             background: linear-gradient(to bottom, var(--gold), var(--gold-dark)); 
             color: #000; 
             font-weight: 800; 
             border: none; 
-            border-radius: 10px;
-            padding: 16px;
-            margin: 12px 0;
+            border-radius: 8px; /* Less rounded */
+            padding: 14px; /* Reduced padding */
+            margin: 10px 0; /* Tighter spacing */
             cursor: pointer; 
             text-transform: uppercase; 
-            letter-spacing: 1px;
-            box-shadow: 0 6px 0 var(--gold-shadow), 0 8px 20px rgba(0,0,0,0.25);
-            transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+            letter-spacing: 0.5px; /* Less aggressive */
+            box-shadow: 
+                0 4px 0 var(--gold-shadow), 
+                0 5px 12px rgba(0,0,0,0.2);
+            transition: all 0.1s; /* Less bounce */
             position: relative;
             top: 0;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             text-decoration: none;
-            font-size: 1.05rem;
+            font-size: 1rem;
         }
-        button:hover { filter: brightness(1.08); transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 0 var(--gold-shadow), 0 12px 25px rgba(0,0,0,0.3); }
-        button:active { top: 6px; box-shadow: 0 0 0 var(--gold-shadow), inset 0 4px 10px rgba(0,0,0,0.25); transform: scale(0.98); }
-        .btn-small { width: auto; padding: 10px 18px; font-size: 0.9rem; margin: 6px; border-radius: 8px; }
-        .btn-group { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; justify-content: center; }
-        .btn-group button { margin: 6px; flex: 1; min-width: 130px; }
+        button:hover { 
+            filter: brightness(1.05);
+            transform: translateY(-1px); /* Subtle lift */
+            box-shadow: 0 5px 0 var(--gold-shadow), 0 7px 15px rgba(0,0,0,0.25);
+        }
+        button:active { 
+            top: 4px;
+            box-shadow: 0 0 0 var(--gold-shadow), inset 0 2px 5px rgba(0,0,0,0.2);
+            transform: none;
+        }
+
+        .btn-small { 
+            width: auto; 
+            padding: 8px 15px; 
+            font-size: 0.85rem; 
+            margin: 5px;
+            border-radius: 6px;
+        }
+
+        .btn-group { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 15px; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+        }
+        .btn-group button { 
+            margin: 5px; 
+            flex: 1; 
+            min-width: 120px; 
+            padding: 12px; /* Slightly smaller */
+        }
+        
         .hidden { display: none; }
-        .msg { margin-top: 18px; font-size: 0.95rem; font-weight: 600; color: var(--deep-blue); }
+        
+        .msg { 
+            margin-top: 15px; 
+            font-size: 0.95rem; 
+            font-weight: 700; /* Bold for clarity */
+            color: var(--deep-blue); 
+        }
         body.dark-mode .msg { color: var(--gold); }
-        .success { color: var(--deep-blue); } body.dark-mode .success { color: var(--gold); }
+        .success { color: var(--deep-blue); } 
+        body.dark-mode .success { color: var(--gold); }
         .error { color: #d32f2f; }
-        .link-text { color: var(--royal-blue); text-decoration: underline; cursor: pointer; margin-top: 12px; display: block; }
+        .link-text { 
+            color: var(--royal-blue); 
+            text-decoration: underline; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            display: block; 
+            font-weight: 700;
+        }
         body.dark-mode .link-text { color: var(--gold); }
 
-        /* --- METAMASK-STYLE BALANCE CARD --- */
+        /* --- CLEAN BALANCE CARD (NO ICONS) --- */
         .balance-card { 
             text-align: left; 
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef); 
-            padding: 25px; 
-            border-radius: 16px; 
-            margin-bottom: 25px; 
-            border: 1px solid #dee2e6;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            background: var(--input-bg); 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            border-left: 4px solid var(--gold); 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--input-border);
         }
         body.dark-mode .balance-card { 
-            background: linear-gradient(135deg, #1a2233, #0f172a);
-            border: 1px solid #334155;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            background: rgba(10, 25, 47, 0.5);
+            border: 1px solid rgba(255, 215, 0, 0.2);
         }
         .balance-label { 
-            font-size: 0.85rem; 
+            font-size: 0.9rem; 
             color: var(--text-sub); 
             text-transform: uppercase; 
-            font-weight: 700; 
+            font-weight: 800; 
             display: block; 
-            margin-bottom: 15px; 
+            margin-bottom: 12px; 
             letter-spacing: 1px;
         }
         .balance-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        body.dark-mode .balance-row { border-bottom-color: rgba(255,255,255,0.1); }
-        .balance-row:last-child { border-bottom: none; }
-        .coin-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-            margin-right: 12px;
-        }
-        .usdc-icon { background: #2775ca; color: white; } /* USDC Blue */
-        .eth-icon { background: #627eea; color: white; } /* ETH Purple */
-        .balance-asset { 
-            display: flex; 
-            align-items: center; 
-            font-weight: 600; 
+            padding: 10px 0;
             font-size: 1.1rem;
+            font-weight: 800;
         }
-        .balance-amount { 
-            font-weight: 800; 
-            font-size: 1.2rem; 
+        .balance-asset {
             color: var(--deep-blue);
         }
-        body.dark-mode .balance-amount { color: #e2e8f0; }
+        body.dark-mode .balance-asset { color: #cbd5e1; }
 
-        /* --- TRANSACTION LEDGER STYLES --- */
+        /* --- TRANSACTION LEDGER --- */
         .ledger-container {
             max-height: 400px;
             overflow-y: auto;
             border: 1px solid var(--input-border);
-            border-radius: 12px;
+            border-radius: 10px;
             margin-top: 15px;
             background: var(--input-bg);
+            font-size: 0.95rem;
         }
         .ledger-item {
-            padding: 14px;
+            padding: 12px;
             border-bottom: 1px solid var(--input-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.88rem;
         }
         .ledger-item:last-child { border-bottom: none; }
-        .ledger-amount { font-weight: 700; }
+        .ledger-amount { font-weight: 800; }
         .ledger-sent { color: #d32f2f; }
         .ledger-received { color: #2e7d32; }
-        .ledger-meta { color: var(--text-sub); font-size: 0.8rem; margin-top: 4px; }
-        .ledger-date { font-size: 0.75rem; color: var(--text-sub); opacity: 0.8; }
+        .ledger-meta { 
+            color: var(--text-sub); 
+            font-size: 0.85rem; 
+            margin-top: 4px; 
+            font-weight: 600;
+        }
+        .ledger-date { 
+            font-size: 0.8rem; 
+            color: var(--text-sub); 
+            opacity: 0.8; 
+            font-weight: 600;
+        }
 
-        .user-list { text-align: left; max-height: 300px; overflow-y: auto; border: 1px solid var(--input-border); border-radius: 10px; margin-top: 18px; background: var(--input-bg); }
-        .user-item { padding: 14px; border-bottom: 1px solid var(--input-border); display: flex; justify-content: space-between; align-items: center; font-size: 0.92rem; }
+        .user-list { 
+            text-align: left; 
+            max-height: 300px; 
+            overflow-y: auto; 
+            border: 1px solid var(--input-border); 
+            border-radius: 10px; 
+            margin-top: 15px; 
+            background: var(--input-bg);
+            font-size: 0.95rem;
+        }
+        .user-item { 
+            padding: 12px; 
+            border-bottom: 1px solid var(--input-border); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
         .user-item:last-child { border-bottom: none; }
-        .user-info strong { display: block; color: var(--text-main); }
-        .user-info span { font-size: 0.82rem; color: var(--text-sub); }
+        .user-info strong { 
+            display: block; 
+            color: var(--text-main); 
+            font-weight: 800;
+        }
+        .user-info span { 
+            font-size: 0.85rem; 
+            color: var(--text-sub); 
+            font-weight: 600;
+        }
         
         .preview-card { 
-            margin-top: 22px; 
+            margin-top: 20px; 
             background: var(--input-bg); 
             border: 2px solid var(--deep-blue); 
-            border-radius: 14px; 
-            padding: 22px; 
+            border-radius: 12px; 
+            padding: 20px; 
             text-align: left; 
-            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            font-size: 0.95rem;
         }
         body.dark-mode .preview-card { 
             border-color: var(--gold); 
@@ -163,9 +257,9 @@
         }
         .preview-header { 
             color: var(--deep-blue); 
-            font-size: 0.92rem; 
+            font-size: 1rem; 
             font-weight: 800; 
-            margin-bottom: 16px; 
+            margin-bottom: 15px; 
             display: flex; 
             align-items: center; 
             gap: 10px; 
@@ -179,15 +273,15 @@
         }
         .preview-body { 
             background: var(--card-bg); 
-            padding: 16px; 
-            border-radius: 10px; 
+            padding: 15px; 
+            border-radius: 8px; 
             font-family: monospace; 
-            font-size: 0.87rem; 
             color: var(--text-main); 
             white-space: pre-wrap; 
             border-left: 4px solid var(--deep-blue); 
             margin-bottom: 20px; 
             border: 1px solid var(--input-border);
+            line-height: 1.5;
         }
         body.dark-mode .preview-body { 
             background: rgba(0,0,0,0.2); 
@@ -199,29 +293,36 @@
             color: var(--gold);
             font-size: 1.6rem;
             font-weight: 800;
-            text-shadow: 1px 1px 0 rgba(0,0,0,0.2), 2px 2px 0 rgba(0,0,0,0.1), 0 0 15px rgba(255, 215, 0, 0.4);
+            text-shadow: 
+                1px 1px 0 rgba(0,0,0,0.2),
+                2px 2px 0 rgba(0,0,0,0.1),
+                0 0 15px rgba(255, 215, 0, 0.4);
             margin: 0;
             letter-spacing: 0.5px;
             text-align: left;
         }
-        body.dark-mode .dashboard-title { text-shadow: 1px 1px 0 rgba(0,0,0,0.3), 0 0 20px rgba(255, 215, 0, 0.6); }
+        body.dark-mode .dashboard-title {
+            text-shadow: 
+                1px 1px 0 rgba(0,0,0,0.3),
+                0 0 20px rgba(255, 215, 0, 0.6);
+        }
 
         /* --- ADMIN TREASURY DASHBOARD --- */
         .treasury-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
+            gap: 12px;
             margin-top: 20px;
         }
         .stat-card {
             background: var(--input-bg);
             border: 1px solid var(--input-border);
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 10px;
+            padding: 12px;
             text-align: center;
         }
         .stat-value {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: var(--gold);
             margin: 5px 0;
@@ -230,6 +331,7 @@
             font-size: 0.85rem;
             color: var(--text-sub);
             text-transform: uppercase;
+            font-weight: 700;
         }
     </style>
 </head>
@@ -265,28 +367,24 @@
                 <button id="theme-toggle" onclick="toggleTheme()" class="btn-small">🌓 Theme</button>
             </div>
             
-            <!-- NO NAV TABS FOR USER - DIRECT CONTENT -->
+            <!-- NAV TABS -->
+            <div class="btn-group" id="nav-tabs" style="margin-bottom:20px;"></div>
+
+            <!-- USER CONTENT -->
             <div id="user-dashboard-content" class="hidden">
-                <!-- METAMASK-STYLE BALANCE -->
                 <div class="balance-card">
                     <span class="balance-label">Available Balance</span>
                     <div class="balance-row">
-                        <div class="balance-asset">
-                            <div class="coin-icon usdc-icon">U</div>
-                            USDC
-                        </div>
-                        <div class="balance-amount">1,000.00</div>
+                        <div class="balance-asset">USDC</div>
+                        <div>1,000.00</div>
                     </div>
                     <div class="balance-row">
-                        <div class="balance-asset">
-                            <div class="coin-icon eth-icon">Ξ</div>
-                            ETH
-                        </div>
-                        <div class="balance-amount">5.00</div>
+                        <div class="balance-asset">ETH</div>
+                        <div>5.00</div>
                     </div>
                 </div>
                 
-                <label style="display:block; text-align:left; font-size:0.85rem; color:var(--text-sub); margin-bottom:8px; font-weight:700;">Receiver's WhatsApp Number</label>
+                <label style="display:block; text-align:left; font-size:0.9rem; color:var(--text-sub); margin-bottom:8px; font-weight:700;">Receiver's WhatsApp Number</label>
                 <input type="text" id="recv-phone" placeholder="+233..." value="">
                 <div class="btn-group"><button onclick="findUser()">🔍 Find User</button></div>
                 <div id="find-msg" class="msg"></div>
@@ -299,20 +397,20 @@
                 <div id="send-msg" class="msg"></div>
             </div>
 
-            <!-- TRANSACTION LEDGER TAB -->
+            <!-- TRANSACTION LEDGER -->
             <div id="ledger-content" class="hidden">
                 <h3 class="dashboard-title" style="font-size:1.4rem; text-align:left;">📜 My Transactions</h3>
-                <p style="font-size:0.88rem; color:var(--text-sub); text-align:left; margin:10px 0;">All your P2P activity in one place.</p>
+                <p style="font-size:0.9rem; color:var(--text-sub); text-align:left; margin:10px 0; font-weight:600;">All your P2P activity in one place.</p>
                 <div class="ledger-container" id="ledger-list">
                     <div style="padding:20px; text-align:center; color:var(--text-sub);">Loading transactions...</div>
                 </div>
             </div>
 
-            <!-- ADMIN DASHBOARDS -->
+            <!-- ADMIN CONTENT -->
             <div id="admin-dashboard-content" class="hidden">
                 <div style="text-align:left; margin-bottom:20px;">
                     <h3 class="dashboard-title" style="font-size:1.4rem;">👑 Admin Controls</h3>
-                    <p style="font-size:0.9rem; color:var(--text-sub); margin:5px 0;">Manage users and system security.</p>
+                    <p style="font-size:0.9rem; color:var(--text-sub); margin:5px 0; font-weight:600;">Manage users and system security.</p>
                 </div>
                 <button onclick="loadUsers()" style="margin-bottom:15px;">👥 Manage Users</button>
                 <div id="user-list-container" class="user-list"></div>
@@ -321,7 +419,7 @@
 
             <div id="admin-treasury-content" class="hidden">
                 <h3 class="dashboard-title" style="font-size:1.4rem; text-align:left;">🏦 Treasury Dashboard</h3>
-                <p style="font-size:0.88rem; color:var(--text-sub); text-align:left; margin:10px 0;">Real-time platform statistics.</p>
+                <p style="font-size:0.9rem; color:var(--text-sub); text-align:left; margin:10px 0; font-weight:600;">Real-time platform statistics.</p>
                 <div class="treasury-stats">
                     <div class="stat-card">
                         <div class="stat-value">0.00</div>
@@ -435,7 +533,7 @@
             
             if(role === 'admin') {
                 document.getElementById('welcome-msg').textContent = '👑 Admin Dashboard';
-                // Show Admin Nav Tabs
+                // ✅ SHOW ADMIN TABS
                 const navTabs = document.getElementById('nav-tabs');
                 navTabs.innerHTML = `
                     <button onclick="showAdminTab('users')">👥 Users</button>
@@ -444,8 +542,24 @@
                 showAdminTab('users');
             } else {
                 document.getElementById('welcome-msg').textContent = '👤 User Dashboard';
-                // NO NAV TABS - SHOW TRANSFER FORM DIRECTLY
+                // ✅ SHOW USER TABS
+                const navTabs = document.getElementById('nav-tabs');
+                navTabs.innerHTML = `
+                    <button onclick="showUserTab('transfer')">💸 Transfer</button>
+                    <button onclick="showUserTab('ledger')">📜 Ledger</button>
+                `;
+                showUserTab('transfer');
+            }
+        }
+
+        function showUserTab(tabName) {
+            document.getElementById('user-dashboard-content').classList.add('hidden');
+            document.getElementById('ledger-content').classList.add('hidden');
+            if(tabName === 'transfer') {
                 document.getElementById('user-dashboard-content').classList.remove('hidden');
+            } else if (tabName === 'ledger') {
+                document.getElementById('ledger-content').classList.remove('hidden');
+                loadLedger();
             }
         }
 
@@ -461,7 +575,7 @@
             }
         }
 
-        // ✅ NEW: ADMIN TREASURY STATS
+        // ✅ ADMIN TREASURY STATS
         async function loadTreasuryStats() {
             const msg = document.getElementById('treasury-msg');
             msg.textContent = "Loading...";
@@ -478,7 +592,6 @@
                     });
                     document.querySelectorAll('.stat-value')[0].textContent = usdc.toFixed(2);
                     document.querySelectorAll('.stat-value')[1].textContent = eth.toFixed(2);
-                    // Transaction count would come from another endpoint in real app
                     msg.textContent = "✅ Stats updated";
                     msg.className = "msg success";
                 } else {
@@ -491,11 +604,12 @@
             }
         }
 
-        // ✅ LOAD LEDGER (UNCHANGED)
+        // ✅ LOAD LEDGER (WORKS INDEPENDENTLY)
         async function loadLedger() {
             const container = document.getElementById('ledger-list');
             container.innerHTML = '<div style="padding:20px; text-align:center;">Loading...</div>';
             try {
+                // In real app, this would fetch from backend
                 const mockTransactions = [
                     { type: 'sent', amount: 10, asset: 'USDC', to: '233555987654', fee: 0.1, date: '2026-03-01 14:30' },
                     { type: 'received', amount: 50, asset: 'USDC', from: '233555987654', fee: 0, date: '2026-02-28 09:15' },
@@ -544,7 +658,7 @@
             const msg = document.getElementById('admin-msg');
             const codeNum = Math.floor(1000 + Math.random() * 9000);
             const resetCode = `KS1-${codeNum}`;
-            msg.innerHTML = `✅ <strong>Code for ${phone}:</strong><br><span style="font-size:1.3rem; font-weight:800; color:var(--gold); letter-spacing:2px; background:var(--deep-blue); padding:8px 15px; border-radius:6px; display:inline-block; margin:8px 0; border:2px solid var(--gold);">${resetCode}</span><div style="font-size:0.85rem; margin-top:5px; color:var(--text-sub);">Send this to the user</div>`;
+            msg.innerHTML = `✅ <strong>Code for ${phone}:</strong><br><span style="font-size:1.2rem; font-weight:800; color:var(--gold); background:var(--deep-blue); padding:6px 12px; border-radius:5px; display:inline-block; margin:8px 0; border:2px solid var(--gold);">${resetCode}</span><div style="font-size:0.85rem; margin-top:5px; color:var(--text-sub);">Send this to the user</div>`;
             msg.className = "msg success";
         }
 
@@ -597,8 +711,8 @@
                     const fee = d.result.treasury_fee;
                     const cleanPhone = receiverPhoneRaw.replace(/[\+\-\s]/g, '');
                     const txRef = "KS1-" + Math.floor(100000 + Math.random() * 900000);
-                    // ✅ UPDATED FOOTER TO KS1 P2P GATEWAY
-                    const messageText = `🔔 *KS1 P2P Gateway*\n\nReceived: ${amt} ${asset.toUpperCase()}\nFrom: ${document.getElementById('phone').value.trim()}\nRef: ${txRef}\nFee: ${fee}\nStatus: ✅ Confirmed\n\nKS1 P2P Gateway`;
+                    // ✅ CORRECT FOOTER
+                    const messageText = `🔔 *KS1 P2P Gateway*\n\nReceived: ${amt} ${asset.toUpperCase()}\nFrom: ${document.getElementById('phone').value.trim()}\nRef: ${txRef}\nFee: ${fee}\nStatus: ✅ Confirmed\n\nPowered by KS1 P2P Gateway`;
                     const waLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(messageText)}`;
                     msgDiv.className = "msg success";
                     msgDiv.innerHTML = `
@@ -608,8 +722,8 @@
                             <div class="preview-body">${messageText.replace(/\n/g, '<br>')}</div>
                             <div class="btn-group">
                                 <button onclick="copyToClipboard(\`${messageText.replace(/`/g, '\\`')}\`)" style="margin:0;">📋 Copy</button>
-                                <!-- ✅ WHATSAPP BUTTON NOW FULL GOLD 3D -->
-                                <button onclick="window.open('${waLink}', '_blank')" style="margin:0; background:linear-gradient(to bottom, #25D366, #1ebc57); box-shadow: 0 6px 0 #1ebc57, 0 8px 20px rgba(37,211,102,0.3);">
+                                <!-- ✅ WHATSAPP BUTTON: YELLOW GOLD, SMALLER -->
+                                <button onclick="window.open('${waLink}', '_blank')" style="margin:0; background:linear-gradient(to bottom, var(--gold), var(--gold-dark)); color:#000; box-shadow: 0 4px 0 var(--gold-shadow), 0 5px 12px rgba(0,0,0,0.2);">
                                     💬 WhatsApp
                                 </button>
                             </div>
