@@ -278,12 +278,12 @@
 <body>
     <div class="glow-bg"></div>
     
-    <!-- ✅ STUNNING LANDING PAGE -->
+    <!-- ✅ SOUL OF KS1 P2P GATEWAY -->
     <div class="landing-card">
         <div class="landing-icon">🌍</div>
         <h1 class="landing-title">KS1 P2P Gateway</h1>
         <div class="landing-brand">Non-custodial • Africa-first • Nonprofit-powered</div>
-        <p class="landing-desc">Send money instantly across borders with zero custody risk. Trusted by families, powered by community.</p>
+        <p class="landing-desc">Peer-to-Peer gateway: Send MoMo ↔ Crypto instantly via phone number. Zero custody. Borderless. Built for Africa.</p>
 
         <div id="login-view">
             <div id="login-form" class="login-form">
@@ -311,7 +311,6 @@
     <div id="dash-view" class="hidden">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
             <h2 id="welcome-msg" class="dashboard-title">Welcome</h2>
-            <!-- ✅ ADMIN NOW HAS THEME TOGGLE -->
             <button id="theme-toggle" onclick="toggleTheme()" class="btn-small">🌓 Theme</button>
         </div>
         
@@ -359,7 +358,6 @@
                 <h3 class="dashboard-title" style="font-size:1.4rem;">👑 Admin Controls</h3>
                 <p style="font-size:0.9rem; color:var(--text-sub); margin:5px 0; font-weight:600;">Manage users and system security.</p>
             </div>
-            <!-- ✅ USERS LIST HIDDEN BY DEFAULT -->
             <button onclick="toggleUsersList()" style="margin-bottom:15px;">👥 Manage Users</button>
             <div id="user-list-container" class="user-list hidden"></div>
             <div id="admin-msg" class="msg"></div>
@@ -476,7 +474,7 @@
         function showDash() {
             document.querySelector('.landing-card').classList.add('hidden');
             document.getElementById('dash-view').classList.remove('hidden');
-            document.getElementById('theme-toggle').style.display = 'block'; // ✅ Always show for both
+            document.getElementById('theme-toggle').style.display = 'block';
             
             if(role === 'admin') {
                 document.getElementById('welcome-msg').textContent = '👑 Admin Dashboard';
@@ -497,7 +495,6 @@
             }
         }
 
-        // ✅ TOGGLE USERS LIST VISIBILITY
         function toggleUsersList() {
             const container = document.getElementById('user-list-container');
             if(container.classList.contains('hidden')) {
